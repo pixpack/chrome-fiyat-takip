@@ -42,5 +42,8 @@
       "resources": ["icon16.png", "icon48.png", "icon128.png", "notification-overlay.css"],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'"
+  }
 }
