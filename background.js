@@ -26,35 +26,29 @@ async function syncTrackerToBackend(tracker) {
       return;
     }
     
-    // Backend'e gönder (XMLHttpRequest ile)
-    const url = `${BACKEND_URL}/api/tracker/add`;
-    console.log('🌐 Backend URL:', url);
+    // Backend'e gönder (fetch API ile - düzeltilmiş)
+    const apiUrl = 'https://chrome-fiyat-v1.vercel.app/api/tracker/add';
+    console.log('🌐 Backend URL:', apiUrl);
     console.log('📦 Gönderilen data:', { chatId, tracker: tracker.productName });
     
-    const body = JSON.stringify({ chatId, tracker });
+    const payload = { chatId, tracker };
+    const body = JSON.stringify(payload);
     console.log('📤 Body length:', body.length);
     
-    // XMLHttpRequest kullan (Service Worker'da fetch sorunlu olabilir)
-    const data = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', url);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try {
-            resolve(JSON.parse(xhr.responseText));
-          } catch (e) {
-            reject(new Error('JSON parse hatası'));
-          }
-        } else {
-          reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
-        }
-      };
-      
-      xhr.onerror = () => reject(new Error('Network hatası'));
-      xhr.send(body);
+    // fetch kullan (hardcoded URL ile)
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: body
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
     
     if (data.success) {
       console.log('✅ Tracker backend\'e kaydedildi:', tracker.productName);
@@ -92,30 +86,24 @@ async function removeTrackerFromBackend(trackerId) {
       return;
     }
     
-    // Backend'den sil (XMLHttpRequest ile)
-    const url = `${BACKEND_URL}/api/tracker/remove`;
-    const body = JSON.stringify({ chatId, trackerId });
+    // Backend'den sil (fetch API ile)
+    const apiUrl = 'https://chrome-fiyat-v1.vercel.app/api/tracker/remove';
+    const payload = { chatId, trackerId };
+    const body = JSON.stringify(payload);
     
-    const data = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', url);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try {
-            resolve(JSON.parse(xhr.responseText));
-          } catch (e) {
-            reject(new Error('JSON parse hatası'));
-          }
-        } else {
-          reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
-        }
-      };
-      
-      xhr.onerror = () => reject(new Error('Network hatası'));
-      xhr.send(body);
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: body
     });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
     
     if (data.success) {
       console.log('✅ Tracker backend\'den silindi:', trackerId);
