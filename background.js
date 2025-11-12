@@ -9,16 +9,9 @@ const BACKEND_URL = 'https://chrome-fiyat-v1.vercel.app';
 // Tracker'ı backend'e kaydet
 async function syncTrackerToBackend(tracker) {
   try {
-    // Tracking mode kontrol et
-    const settings = await chrome.storage.local.get(['trackingMode', 'telegramChatId']);
-    const mode = settings.trackingMode || 'hybrid';
-    const chatId = settings.telegramChatId;
-    
-    // Extension-only modunda backend'e kaydetme
-    if (mode === 'extension-only') {
-      console.log('📵 Extension-only mode, backend sync atlandı');
-      return;
-    }
+    // Chrome-only tracking (simplified - no backend sync)
+    console.log('📵 Chrome-only mode, backend sync disabled');
+    return;
     
     // Chat ID yoksa kaydetme
     if (!chatId) {
@@ -69,22 +62,9 @@ async function syncTrackerToBackend(tracker) {
 // Tracker'ı backend'den sil
 async function removeTrackerFromBackend(trackerId) {
   try {
-    // Tracking mode kontrol et
-    const settings = await chrome.storage.local.get(['trackingMode', 'telegramChatId']);
-    const mode = settings.trackingMode || 'hybrid';
-    const chatId = settings.telegramChatId;
-    
-    // Extension-only modunda backend'e kaydetme
-    if (mode === 'extension-only') {
-      console.log('📵 Extension-only mode, backend remove atlandı');
-      return;
-    }
-    
-    // Chat ID yoksa
-    if (!chatId) {
-      console.log('⚠️ Telegram bağlı değil, backend remove atlandı');
-      return;
-    }
+    // Chrome-only tracking (simplified - no backend sync)
+    console.log('📵 Chrome-only mode, backend remove disabled');
+    return;
     
     // Backend'den sil (fetch API ile)
     const apiUrl = 'https://chrome-fiyat-v1.vercel.app/api/tracker/remove';
@@ -565,10 +545,7 @@ async function checkSingleTracker(trackerId) {
             priority: 2,
             requireInteraction: false
           });
-          
-          // Telegram bildirimi gönder
-          const telegramMessage = `${discountTitle}\n\n<b>${tracker.productName}</b>\n\n💰 Normal Fiyat: ${formatPrice(price, tracker.currency)}\n🎁 ${isTrendyol ? 'İndirimli' : 'Sepet'} Fiyatı: ${formatPrice(basketPrice, tracker.currency)}\n📉 İndirim: %${discount}\n\n${tracker.url}`;
-          sendTelegramNotification(telegramMessage, tracker.url);
+
                 
                 // Bildirim geçmişine ekle
                 addNotificationToHistory({
@@ -696,8 +673,6 @@ async function checkSingleTracker(trackerId) {
               const priceChangeText = price < lastPrice.price ? 'DÜŞTÜ' : 'ARTTI';
               const priceChangeAmount = price - lastPrice.price; // Mutlak değişim
               const percentage = ((price - lastPrice.price) / lastPrice.price * 100); // Yüzde
-              const telegramMessage = `${priceIcon} <b>FİYAT ${priceChangeText}!</b>\n\n<b>${tracker.productName}</b>\n\n💰 Eski Fiyat: ${formatPrice(lastPrice.price, tracker.currency)}\n💰 Yeni Fiyat: ${formatPrice(price, tracker.currency)}\n${priceIcon} Değişim: ${formatPrice(Math.abs(priceChangeAmount), tracker.currency)} (${Math.abs(percentage).toFixed(1)}%)\n\n${tracker.url}`;
-              sendTelegramNotification(telegramMessage, tracker.url);
               
               // Bildirim geçmişine ekle
               addNotificationToHistory({
@@ -756,58 +731,7 @@ async function checkSingleTracker(trackerId) {
   });
 }
 
-// Telegram bildirimi gönder
-async function sendTelegramNotification(message, productUrl = null) {
-  try {
-    const data = await chrome.storage.local.get(['telegramBotToken', 'telegramChatId']);
-    
-    if (!data.telegramBotToken || !data.telegramChatId) {
-      console.log('⚠️ Telegram ayarları yapılmamış');
-      return false;
-    }
-    
-    const url = `https://api.telegram.org/bot${data.telegramBotToken}/sendMessage`;
-    
-    const payload = {
-      chat_id: data.telegramChatId,
-      text: message,
-      parse_mode: 'HTML',
-      disable_web_page_preview: false
-    };
-    
-    // Eğer ürün URL'i varsa, buton ekle
-    if (productUrl) {
-      payload.reply_markup = {
-        inline_keyboard: [
-          [
-            { text: '🛒 Ürüne Git', url: productUrl }
-          ]
-        ]
-      };
-    }
-    
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload)
-    });
-    
-    const result = await response.json();
-    
-    if (result.ok) {
-      console.log('✅ Telegram bildirimi gönderildi');
-      return true;
-    } else {
-      console.error('❌ Telegram hatası:', result.description);
-      return false;
-    }
-  } catch (error) {
-    console.error('❌ Telegram gönderme hatası:', error);
-    return false;
-  }
-}
+// Telegram removed - Chrome notifications only
 
 function parsePrice(priceStr) {
   let cleaned = priceStr.replace(/[^\d.,]/g, '');
