@@ -534,147 +534,41 @@
         <!-- Tab: Notifications -->
         <div class="tab-content active" id="tab-notifications">
         
-        <!-- Telegram Not Connected -->
-        <div class="card" id="telegram-not-connected" style="display: none;">
-            <div style="text-align: center; padding: 20px;">
-                <h2 style="font-size: 24px; font-weight: 600; color: #1a202c; margin-bottom: 16px;">📱 Telegram'ı Bağla</h2>
-                <p style="font-size: 14px; color: #718096; margin-bottom: 24px;">Fiyat değişikliklerini Telegram'dan almak için botla bağlantı kur.</p>
-                
-                <button class="qr-button" id="telegram-connect-btn" style="margin-bottom: 20px;">
-                    <span style="font-size: 24px;">🤖</span>
-                    <span>Telegram Botunu Aç</span>
-                    <span>→</span>
-                </button>
-                
-                <div id="telegram-instructions" style="display: none; background: #f7fafc; border-radius: 8px; padding: 20px; text-align: left; margin-top: 20px;">
-                    <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 12px;">📋 Talimatlar:</h3>
-                    <ol style="font-size: 14px; color: #4a5568; line-height: 1.8; margin-left: 20px;">
-                        <li>Telegram'da botu açın</li>
-                        <li><strong>/start</strong> yazın</li>
-                        <li>Bot size bir kod gönderecek</li>
-                        <li>O kodu aşağıya yapıştırın</li>
-                    </ol>
-                    
-                    <div style="margin-top: 16px;">
-                        <input type="text" id="chat-id-input" placeholder="Chat ID'nizi girin (örn: 7274355748)" 
-                               style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; margin-bottom: 12px;">
-                        <button id="manual-connect-btn" style="width: 100%; background: #48bb78; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
-                            ✅ Bağlan
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Telegram Connected & Daily Control (2 columns) -->
-        <div class="two-column-grid" id="telegram-daily-grid" style="display: none;">
-            <!-- Telegram Connected -->
-            <div class="card" id="telegram-connected">
-                <div class="telegram-connected">
-                    <div class="telegram-info">
-                        <div class="check-icon">✓</div>
-                        <div class="telegram-text">
-                            <h2>Telegram Connected</h2>
-                            <p>Chat ID: <span id="telegram-chat-id-display"></span></p>
-                        </div>
-                    </div>
-                    <button class="disconnect-btn" id="telegram-disconnect-btn">Disconnect</button>
-                </div>
-            </div>
-            
-            <!-- Daily Control Time -->
-            <div class="card" id="daily-control-card">
-                <div class="card-title">
-                    <span class="card-title-icon">🕐</span>
-                    <h2>Daily Control Time</h2>
-                </div>
-                
-                <div class="time-setting">
-                    <p class="time-label">Daily backend check is set to: <span>12:00 (Noon)</span></p>
-                    <select class="time-select" id="daily-check-hour">
-                        <option value="12">12:00 (Noon)</option>
-                        <option value="0">00:00 (Midnight)</option>
-                        <option value="6">06:00 (Morning)</option>
-                        <option value="9">09:00 (Morning)</option>
-                        <option value="15">15:00 (Afternoon)</option>
-                        <option value="18">18:00 (Evening)</option>
-                        <option value="21">21:00 (Night)</option>
-                    </select>
-                </div>
-                
-                <p class="time-note">Vercel backend'i her gün saat 12:00'de tüm fiyatları kontrol eder. Chrome açıkken extension 1 dakikada bir otomatik kontrol yapar.</p>
-            </div>
-        </div>
-        
-        <!-- Price Tracking Mode -->
-        <div class="card" id="telegram-settings-card" style="display: none;">
+        <!-- Notification Settings -->
+        <div class="card">
             <div class="card-title">
-                <span class="card-title-icon">⚙️</span>
-                <h2>Price Tracking Mode</h2>
+                <span class="card-title-icon">🔔</span>
+                <h2>Bildirim Ayarları</h2>
             </div>
             
-            <div class="tracking-modes">
-                <!-- Chrome Only -->
-                <div class="mode-option" data-mode="extension-only">
-                    <div class="radio-button"></div>
-                    <div class="mode-header">
-                        <div class="mode-title">
-                            <span class="mode-icon">💻</span>
-                            <span class="mode-name">Chrome Only</span>
-                        </div>
-                    </div>
-                    <ul class="mode-features">
-                        <li>1-minute checks.</li>
-                        <li>Only works when Chrome is open.</li>
-                    </ul>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px; background: #f0f9ff; border-radius: 12px; margin-bottom: 20px;">
+                <div style="flex: 1;">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #1e40af; margin-bottom: 8px;">Chrome Bildirimleri Aktif</h3>
+                    <p style="font-size: 14px; color: #1e40af; line-height: 1.6;">
+                        Takip ettiğiniz ürünlerde fiyat değişikliği olduğunda Chrome üzerinden anında bildirim alacaksınız.
+                    </p>
                 </div>
-                
-                <!-- Hybrid Mode -->
-                <div class="mode-option selected" data-mode="hybrid">
-                    <span class="recommended-badge">Recommended</span>
-                    <div class="radio-button"></div>
-                    <div class="mode-header">
-                        <div class="mode-title">
-                            <span class="mode-icon">🚀</span>
-                            <span class="mode-name">Hybrid Mode</span>
-                        </div>
-                    </div>
-                    <ul class="mode-features">
-                        <li>1-minute checks when Chrome is open.</li>
-                        <li>Daily checks when Chrome is closed.</li>
-                        <li>Backend'de günlük yedek kontrol.</li>
-                    </ul>
-                </div>
-                
-                <!-- Backend Only -->
-                <div class="mode-option" data-mode="backend-only">
-                    <div class="radio-button"></div>
-                    <div class="mode-header">
-                        <div class="mode-title">
-                            <span class="mode-icon">☁️</span>
-                            <span class="mode-name">Backend Only</span>
-                        </div>
-                    </div>
-                    <ul class="mode-features">
-                        <li>Günde 1 kere otomatik kontrol (12:00).</li>
-                        <li>Chrome gerektirmez.</li>
-                    </ul>
+                <div>
+                    <span style="font-size: 48px;">🔔</span>
                 </div>
             </div>
             
             <div class="info-box">
                 <span class="info-icon">ℹ️</span>
-                <p class="info-text">Chrome açıkken her dakika, kapalıyken günde bir kez (öğlen 12:00) fiyatları kontrol ederiz. Böylece hiçbir fırsat kaçırmaz, her zaman en güncel fiyatları takip edersiniz!</p>
+                <div style="flex: 1;">
+                    <p class="info-text" style="margin-bottom: 12px;">
+                        <strong>Nasıl çalışır?</strong><br>
+                        Extension, Chrome açıkken her dakika fiyatları kontrol eder ve değişiklik olduğunda size hemen bildirim gönderir.
+                    </p>
+                    <ul style="font-size: 14px; color: #2c5282; line-height: 1.8; margin-left: 20px;">
+                        <li>✅ Otomatik fiyat kontrolü (her 1 dakikada)</li>
+                        <li>✅ Anında Chrome bildirimleri</li>
+                        <li>✅ Fiyat düşüşlerini kaçırmayın</li>
+                        <li>✅ Tamamen ücretsiz</li>
+                    </ul>
+                </div>
             </div>
         </div>
-        
-        <!-- Test Button -->
-        <button class="test-button" id="telegram-test-connected-btn" style="display: none;">
-            <span>Send Test Notification</span>
-            <span>➤</span>
-        </button>
-        
-        <div style="clear: both; margin-bottom: 40px;"></div>
         
         </div>
         <!-- End Tab: Notifications -->
