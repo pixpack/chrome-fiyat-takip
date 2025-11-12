@@ -3,423 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Notification Settings</title>
+    <title>Fiyat Takip - Ayarlar</title>
+    <link rel="stylesheet" href="output.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f7fa;
-            padding: 40px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            background: #F5F1EA;
         }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 8px;
-        }
-        
-        .subtitle {
-            font-size: 16px;
-            color: #718096;
-            margin-bottom: 40px;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        /* Telegram Connected */
-        .telegram-connected {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .telegram-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        
-        .check-icon {
-            width: 48px;
-            height: 48px;
-            background: #48bb78;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+        .coral-accent { color: #E85D4A; }
+        .coral-bg { background-color: #E85D4A; }
+        .material-icons-outlined {
             font-size: 24px;
         }
         
-        .telegram-text h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1a202c;
-            margin-bottom: 4px;
+        /* Additional Tailwind utilities */
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .min-w-0 { min-width: 0; }
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .line-through { text-decoration: line-through; }
+        .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+        .from-red-500 { --tw-gradient-from: #ef4444; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+        .to-green-500 { --tw-gradient-to: #10b981; }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         
-        .telegram-text p {
-            font-size: 14px;
-            color: #718096;
+        /* Hover effects */
+        .hover-btn:hover { opacity: 0.9; }
+        .hover-gray-btn:hover { background: #f9fafb !important; }
+        .hover-gray-btn-light:hover { background: #f3f4f6 !important; }
+        
+        /* Price History Dropdown */
+        .price-history-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+            padding: 0 1rem;
         }
         
-        .telegram-text p span {
-            font-weight: 600;
-            color: #1a202c;
+        .price-history-container.open {
+            max-height: 400px;
+            padding: 0 1rem 1rem 1rem;
+            overflow-y: auto;
         }
         
-        .disconnect-btn {
-            background: white;
-            border: 1px solid #e2e8f0;
-            color: #e53e3e;
-            padding: 10px 20px;
+        .price-history-list {
+            background: #F9FAFB;
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: 12px;
+            border-top: 2px solid #E5E7EB;
+            margin-top: 12px;
         }
         
-        .disconnect-btn:hover {
-            background: #fff5f5;
-            border-color: #e53e3e;
-        }
-        
-        /* Card Title */
-        .card-title {
+        .price-history-item {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        
-        .card-title-icon {
-            color: #3182ce;
-            font-size: 24px;
-        }
-        
-        .card-title h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1a202c;
-        }
-        
-        /* Tracking Modes */
-        .tracking-modes {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-        
-        .mode-option {
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        
-        .mode-option:hover {
-            border-color: #cbd5e0;
-        }
-        
-        .mode-option.selected {
-            border-color: #3182ce;
-            background: #ebf8ff;
-        }
-        
-        .mode-header {
-            display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
-        }
-        
-        .mode-title {
-            display: flex;
             align-items: center;
-            gap: 12px;
+            padding: 8px 12px;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 12px;
         }
         
-        .mode-icon {
-            font-size: 24px;
+        .price-history-item:last-child {
+            border-bottom: none;
         }
         
-        .mode-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a202c;
+        .price-history-item.changed {
+            background: #FEF3C7;
+            border-radius: 4px;
+            margin: 2px 0;
         }
         
-        .recommended-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: #3182ce;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 12px;
+        .price-history-date {
+            color: #6B7280;
             font-size: 11px;
+        }
+        
+        .price-history-price {
+            font-weight: 600;
+            color: #111827;
+        }
+        
+        .price-history-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
             font-weight: 600;
         }
         
-        .radio-button {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #cbd5e0;
-            border-radius: 50%;
-            position: relative;
-            transition: all 0.2s;
+        .price-history-badge.up {
+            background: #FEE2E2;
+            color: #991B1B;
         }
         
-        .mode-option.selected .radio-button {
-            border-color: #3182ce;
-            background: #3182ce;
+        .price-history-badge.down {
+            background: #DCFCE7;
+            color: #166534;
         }
         
-        .mode-option.selected .radio-button::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .mode-features {
-            list-style: none;
-            margin-left: 36px;
-        }
-        
-        .mode-features li {
-            font-size: 14px;
-            color: #4a5568;
-            margin-bottom: 6px;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .mode-features li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: #718096;
-        }
-        
-        /* Info Box */
-        .info-box {
-            background: #ebf8ff;
-            border: 1px solid #bee3f8;
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            gap: 12px;
-        }
-        
-        .info-icon {
-            color: #3182ce;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-        
-        .info-text {
-            font-size: 14px;
-            color: #2c5282;
-            line-height: 1.6;
-        }
-        
-        /* Daily Control Time */
-        .time-setting {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        
-        .time-label {
-            font-size: 16px;
-            color: #1a202c;
-        }
-        
-        .time-label span {
-            font-weight: 600;
-        }
-        
-        .time-select {
-            padding: 10px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #1a202c;
-            background: white;
-            cursor: pointer;
-            min-width: 180px;
-        }
-        
-        .time-note {
-            font-size: 14px;
-            color: #718096;
-            line-height: 1.6;
-        }
-        
-        /* Test Button */
-        .test-button {
-            background: #3182ce;
-            color: white;
-            padding: 14px 28px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            float: right;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-        
-        .test-button:hover {
-            background: #2c5282;
-        }
-        
-        .clock-icon {
-            font-size: 20px;
+        .rotate-180 {
+            transform: rotate(180deg);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Telegram Notification Settings</h1>
-        <p class="subtitle">Manage how and when you receive price tracking notifications.</p>
-        
-        <!-- Telegram Connected -->
-        <div class="card">
-            <div class="telegram-connected">
-                <div class="telegram-info">
-                    <div class="check-icon">✓</div>
-                    <div class="telegram-text">
-                        <h2>Telegram Connected</h2>
-                        <p>Chat ID: <span id="chat-id">7274355748</span></p>
-                    </div>
-                </div>
-                <button class="disconnect-btn" id="disconnect-btn">Disconnect</button>
-            </div>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Fiyat Takip Sistemi</h1>
+            <p class="text-gray-600">Ürün fiyat değişiklikleri ve takip performansı</p>
         </div>
-        
-        <!-- Price Tracking Mode -->
-        <div class="card">
-            <div class="card-title">
-                <span class="card-title-icon">⚙️</span>
-                <h2>Price Tracking Mode</h2>
+
+        <!-- Telegram Ayarları -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="material-icons-outlined" style="color: #0088cc; font-size: 32px;">telegram</span>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Telegram Bildirimleri</h2>
+                    <p class="text-sm text-gray-600">Fiyat değişikliklerini Telegram'dan al</p>
+                </div>
             </div>
             
-            <div class="tracking-modes">
-                <!-- Chrome Only -->
-                <div class="mode-option" data-mode="extension-only">
-                    <div class="mode-header">
-                        <div class="mode-title">
-                            <span class="mode-icon">💻</span>
-                            <span class="mode-name">Chrome Only</span>
+            <!-- Bağlı Değil -->
+            <div id="telegram-not-connected" class="space-y-4">
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="material-icons-outlined" style="color: #0088cc; font-size: 28px;">qr_code_scanner</span>
+                        <div>
+                            <h3 class="font-bold text-blue-900">Hızlı Bağlan</h3>
+                            <p class="text-sm text-blue-700">QR kod ile tek adımda bağlan</p>
                         </div>
-                        <div class="radio-button"></div>
                     </div>
-                    <ul class="mode-features">
-                        <li>1-minute checks.</li>
-                        <li>Only works when Chrome is open.</li>
-                    </ul>
+                    
+                    <!-- QR Kod Container -->
+                    <div id="qr-container" class="text-center py-4">
+                        <button id="telegram-connect-btn" class="bg-blue-500 hover-btn text-white px-8 py-3 rounded-lg font-bold text-lg">
+                            📱 QR Kod Göster
+                        </button>
+                    </div>
+                    
+                    <div id="qr-waiting" style="display: none;" class="text-center">
+                        <img id="qr-code-image" src="" alt="QR Code" class="mx-auto mb-4 rounded-lg shadow-lg" style="width: 250px; height: 250px;">
+                        <div class="flex items-center justify-center gap-2 mb-2">
+                            <div class="animate-pulse w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <p class="font-semibold text-blue-900">Telegram'dan QR kodu okutun...</p>
+                        </div>
+                        <p class="text-sm text-blue-700 mb-3">Veya botun linkine tıklayın: <a id="bot-link" href="#" target="_blank" class="underline font-semibold">@Fiyatci_bot</a></p>
+                        <button id="qr-cancel-btn" class="text-red-600 hover:text-red-800 text-sm font-semibold">İptal Et</button>
+                    </div>
                 </div>
                 
-                <!-- Hybrid Mode -->
-                <div class="mode-option selected" data-mode="hybrid">
-                    <span class="recommended-badge">Recommended</span>
-                    <div class="mode-header">
-                        <div class="mode-title">
-                            <span class="mode-icon">🚀</span>
-                            <span class="mode-name">Hybrid Mode</span>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div class="flex gap-3">
+                        <span class="material-icons-outlined" style="color: #f59e0b;">info</span>
+                        <div class="text-sm text-yellow-800">
+                            <p class="font-semibold mb-1">Nasıl Çalışır?</p>
+                            <ol class="list-decimal list-inside space-y-1">
+                                <li>QR kodu telefonunuzla okutun</li>
+                                <li>Telegram botuna yönlendirileceksiniz</li>
+                                <li>/start butonuna basın</li>
+                                <li>Otomatik bağlanacak! ✅</li>
+                            </ol>
                         </div>
-                        <div class="radio-button"></div>
                     </div>
-                    <ul class="mode-features">
-                        <li>1-minute checks when Chrome is open.</li>
-                        <li>Daily checks when Chrome is closed.</li>
-                        <li>7/24 backup control on backend.</li>
-                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bağlı -->
+            <div id="telegram-connected" style="display: none;">
+                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4 mb-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="material-icons-outlined" style="color: #10b981; font-size: 32px;">check_circle</span>
+                            <div>
+                                <h3 class="font-bold text-green-900">Telegram Bağlı! ✅</h3>
+                                <p class="text-sm text-green-700">Chat ID: <span id="telegram-chat-id-display" class="font-mono font-semibold"></span></p>
+                            </div>
+                        </div>
+                        <button id="telegram-disconnect-btn" class="bg-red-500 hover-btn text-white px-4 py-2 rounded-lg font-semibold text-sm">
+                            Bağlantıyı Kes
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- Backend Only -->
-                <div class="mode-option" data-mode="backend-only">
-                    <div class="mode-header">
-                        <div class="mode-title">
-                            <span class="mode-icon">☁️</span>
-                            <span class="mode-name">Backend Only</span>
-                        </div>
-                        <div class="radio-button"></div>
+                <!-- Tracking Mode Seçenekleri -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-icons-outlined" style="color: #3b82f6; font-size: 24px;">settings</span>
+                        <h4 class="font-bold text-gray-900">Fiyat Takip Modu</h4>
                     </div>
-                    <ul class="mode-features">
-                        <li>One automatic check per day (at 12:00).</li>
-                        <li>Does not require Chrome to be open.</li>
-                    </ul>
+                    
+                    <div class="space-y-3">
+                        <!-- Mode 1: Extension Only -->
+                        <label class="flex items-start gap-3 p-3 bg-white rounded-lg border-2 cursor-pointer hover:border-blue-300 transition-colors">
+                            <input type="radio" name="trackingMode" value="extension-only" class="mt-1">
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-900">🖥️ Sadece Chrome Açıkken</div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    • 1 dakikada bir kontrol<br>
+                                    • Chrome kapalıysa çalışmaz
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <!-- Mode 2: Hybrid (Recommended) -->
+                        <label class="flex items-start gap-3 p-3 bg-white rounded-lg border-2 border-blue-500 cursor-pointer hover:border-blue-600 transition-colors">
+                            <input type="radio" name="trackingMode" value="hybrid" class="mt-1" checked>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-semibold text-gray-900">🚀 Hybrid Mod</span>
+                                    <span class="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full font-semibold">ÖNERİLEN</span>
+                                </div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    • Chrome açıkken: 1 dakikada bir<br>
+                                    • Chrome kapalıyken: Günde 1 kere<br>
+                                    • Backend'de günlük yedek kontrol
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <!-- Mode 3: Backend Only -->
+                        <label class="flex items-start gap-3 p-3 bg-white rounded-lg border-2 cursor-pointer hover:border-blue-300 transition-colors">
+                            <input type="radio" name="trackingMode" value="backend-only" class="mt-1">
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-900">☁️ Sadece Backend</div>
+                                <div class="text-sm text-gray-600 mt-1">
+                                    • Günde 1 kere otomatik kontrol (12:00)<br>
+                                    • Chrome gerektirmez
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="mt-3 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <div class="flex gap-2 text-sm text-yellow-800">
+                            <span class="material-icons-outlined" style="color: #f59e0b; font-size: 18px;">info</span>
+                            <p><strong>Not:</strong> Vercel ücretsiz planı günde 1 backend kontrol sağlar (12:00). Chrome açıkken extension 1 dakikada bir kontrol eder.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="info-box">
-                <span class="info-icon">ℹ️</span>
-                <p class="info-text">The free plan provides one backend check per day. With the Pro plan, you can increase this to once every minute for the most up-to-date tracking.</p>
+                
+                <!-- Günlük Kontrol Saati -->
+                <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-icons-outlined" style="color: #9333ea; font-size: 24px;">schedule</span>
+                        <h4 class="font-bold text-gray-900">Günlük Kontrol Saati</h4>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 mb-3">
+                        <select id="daily-check-hour" class="flex-1 px-4 py-2 bg-white border-2 border-purple-300 rounded-lg font-semibold text-gray-900 focus:outline-none focus:border-purple-500">
+                            <option value="0">00:00 (Gece Yarısı)</option>
+                            <option value="3">03:00 (Gece)</option>
+                            <option value="6">06:00 (Sabah)</option>
+                            <option value="9">09:00 (Sabah)</option>
+                            <option value="12" selected>12:00 (Öğle)</option>
+                            <option value="15">15:00 (Öğleden Sonra)</option>
+                            <option value="18">18:00 (Akşam)</option>
+                            <option value="21">21:00 (Gece)</option>
+                        </select>
+                        <span class="text-gray-600 text-sm">(Türkiye Saati)</span>
+                    </div>
+                    
+                    <div class="bg-purple-100 border border-purple-300 rounded-lg p-3">
+                        <div class="flex gap-2 text-sm text-purple-900">
+                            <span class="material-icons-outlined" style="color: #9333ea; font-size: 18px;">info</span>
+                            <div>
+                                <p class="font-semibold mb-1">Şu anda: Günlük kontrol (12:00)</p>
+                                <p class="text-xs">Vercel backend'i her gün saat 12:00'de tüm fiyatları kontrol eder. Chrome açıkken extension 1 dakikada bir otomatik kontrol yapar.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="telegram-test-connected-btn" class="w-full bg-blue-500 hover-btn text-white px-6 py-3 rounded-lg font-semibold">
+                    🧪 Test Bildirimi Gönder
+                </button>
             </div>
         </div>
-        
-        <!-- Daily Control Time -->
-        <div class="card">
-            <div class="card-title">
-                <span class="card-title-icon clock-icon">🕐</span>
-                <h2>Daily Control Time</h2>
-            </div>
-            
-            <div class="time-setting">
-                <p class="time-label">Daily backend check is set to: <span>12:00 (Noon)</span></p>
-                <select class="time-select" id="time-select">
-                    <option value="12">12:00 (Noon)</option>
-                    <option value="0">00:00 (Midnight)</option>
-                    <option value="6">06:00 (Morning)</option>
-                    <option value="9">09:00 (Morning)</option>
-                    <option value="15">15:00 (Afternoon)</option>
-                    <option value="18">18:00 (Evening)</option>
-                    <option value="21">21:00 (Night)</option>
-                </select>
-            </div>
-            
-            <p class="time-note">This setting applies to Hybrid (when Chrome is closed) and Backend Only modes.</p>
+
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="summary-stats">
+            <!-- Stats will be loaded here -->
         </div>
-        
-        <!-- Test Button -->
-        <button class="test-button" id="test-btn">
-            <span>Send Test Notification</span>
-            <span>➤</span>
-        </button>
+
+        <!-- Products List -->
+        <div id="products-list">
+            <!-- Products will be loaded here -->
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-500 mb-2">Fiyatlar son kontrol tarihinden itibaren</p>
+        </div>
     </div>
-    
+
+    <!-- Alert Modal -->
+    <div id="alert-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 400px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                <span class="material-icons-outlined" id="alert-icon" style="font-size: 48px; color: #2563eb;"></span>
+                <div style="flex: 1;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;" id="alert-title">Bildirim</h3>
+                    <p style="font-size: 0.875rem; color: #6b7280; white-space: pre-wrap;" id="alert-message"></p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <button id="alert-ok-btn" class="coral-bg hover-btn" style="padding: 0.75rem 2rem; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; color: white; cursor: pointer;">
+                    Tamam
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Modal -->
+    <div id="confirm-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 400px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                <span class="material-icons-outlined" style="font-size: 48px; color: #f59e0b;">warning</span>
+                <div style="flex: 1;">
+                    <h3 style="font-size: 1.25rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem;">Onay Gerekli</h3>
+                    <p style="font-size: 0.875rem; color: #6b7280; white-space: pre-wrap;" id="confirm-message"></p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button id="confirm-cancel-btn" class="hover-gray-btn" style="padding: 0.75rem 1.5rem; background: white; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #374151; cursor: pointer;">
+                    İptal
+                </button>
+                <button id="confirm-ok-btn" class="hover-btn" style="padding: 0.75rem 1.5rem; background: #ef4444; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; color: white; cursor: pointer;">
+                    Evet, Eminim
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: #111827;">Fiyat Takip Ayarları</h2>
+                <button id="modal-close-btn" class="hover-gray-btn-light" style="background: transparent; border: none; cursor: pointer; padding: 0.5rem; border-radius: 0.25rem;">
+                    <span class="material-icons-outlined" style="font-size: 24px; color: #6b7280;">close</span>
+                </button>
+            </div>
+
+            <div id="modal-product-name" style="font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 1.5rem; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;"></div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Kontrol Sıklığı</label>
+                <select id="check-interval" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; background: white; cursor: pointer;">
+                    <option value="1">1 dakika</option>
+                    <option value="5">5 dakika</option>
+                    <option value="10">10 dakika</option>
+                    <option value="15">15 dakika</option>
+                    <option value="30">30 dakika</option>
+                    <option value="60" selected>1 saat</option>
+                    <option value="120">2 saat</option>
+                    <option value="240">4 saat</option>
+                    <option value="360">6 saat</option>
+                    <option value="720">12 saat</option>
+                    <option value="1440">24 saat</option>
+                </select>
+                <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem;">Fiyat kontrolü bu sürede bir yapılacak</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="enable-notifications" style="width: 1.25rem; height: 1.25rem; margin-right: 0.75rem; cursor: pointer;">
+                    <span style="font-size: 0.875rem; font-weight: 600; color: #374151;">Fiyat düşünce bildirim gönder</span>
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button id="modal-cancel-btn" class="hover-gray-btn" style="padding: 0.75rem 1.5rem; background: white; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #374151; cursor: pointer;">
+                    İptal
+                </button>
+                <button id="modal-save-btn" class="coral-bg hover-btn" style="padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; color: white; cursor: pointer;">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="settings.js"></script>
 </body>
 </html>
