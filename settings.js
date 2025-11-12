@@ -711,10 +711,28 @@ async function loadTelegramStatus() {
     document.getElementById('telegram-not-connected').style.display = 'none';
     document.getElementById('telegram-connected').style.display = 'block';
     document.getElementById('telegram-chat-id-display').textContent = data.telegramChatId;
+    
+    // Ayar kartlarını göster
+    const settingsCard = document.getElementById('telegram-settings-card');
+    const dailyCard = document.getElementById('daily-control-card');
+    const testBtn = document.getElementById('telegram-test-connected-btn');
+    
+    if (settingsCard) settingsCard.style.display = 'block';
+    if (dailyCard) dailyCard.style.display = 'block';
+    if (testBtn) testBtn.style.display = 'flex';
   } else {
     // Bağlı değil
     document.getElementById('telegram-not-connected').style.display = 'block';
     document.getElementById('telegram-connected').style.display = 'none';
+    
+    // Ayar kartlarını gizle
+    const settingsCard = document.getElementById('telegram-settings-card');
+    const dailyCard = document.getElementById('daily-control-card');
+    const testBtn = document.getElementById('telegram-test-connected-btn');
+    
+    if (settingsCard) settingsCard.style.display = 'none';
+    if (dailyCard) dailyCard.style.display = 'none';
+    if (testBtn) testBtn.style.display = 'none';
   }
 }
 
@@ -871,15 +889,26 @@ async function loadTrackingMode() {
   const data = await chrome.storage.local.get(['trackingMode']);
   const mode = data.trackingMode || 'hybrid'; // Varsayılan: hybrid
   
-  // Radio button'ı seç
+  // Eski radio button sistemi (fallback)
   const radio = document.querySelector(`input[name="trackingMode"][value="${mode}"]`);
   if (radio) {
     radio.checked = true;
   }
+  
+  // Yeni mode-option sistemi
+  const modeOptions = document.querySelectorAll('.mode-option');
+  modeOptions.forEach(option => {
+    if (option.getAttribute('data-mode') === mode) {
+      option.classList.add('selected');
+    } else {
+      option.classList.remove('selected');
+    }
+  });
 }
 
 // Tracking mode değişikliğini dinle
 document.addEventListener('DOMContentLoaded', () => {
+  // Eski radio button sistemi
   const radios = document.querySelectorAll('input[name="trackingMode"]');
   
   radios.forEach(radio => {
@@ -893,15 +922,48 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Bilgilendirme
       let message = '';
+      
       if (mode === 'extension-only') {
-        message = '🖥️ Sadece Chrome açıkken fiyatlar kontrol edilecek.';
+        message = 'Sadece Chrome moduna geçildi. Extension yalnızca Chrome açıkken fiyatları kontrol edecek.';
       } else if (mode === 'hybrid') {
-        message = '🚀 Chrome açıkken 1 dakikada bir, kapalıyken günde 1 kere kontrol edilecek.';
+        message = 'Hybrid moda geçildi. Chrome açıkken 1 dakikada bir, kapalıyken günde 1 kere kontrol edilecek.';
       } else if (mode === 'backend-only') {
-        message = '☁️ Sadece backend (günde 1 kere) kontrol edecek. Chrome gerektirmez.';
+        message = 'Backend moduna geçildi. Günde 1 kere otomatik kontrol yapılacak.';
       }
       
-      await showAlert(message, 'Ayar Kaydedildi', 'success');
+      await showAlert(message, 'Mod Değiştirildi', 'success');
+    });
+  });
+  
+  // Yeni mode-option sistemi
+  const modeOptions = document.querySelectorAll('.mode-option');
+  
+  modeOptions.forEach(option => {
+    option.addEventListener('click', async () => {
+      const mode = option.getAttribute('data-mode');
+      
+      // Tüm seçimleri kaldır
+      modeOptions.forEach(opt => opt.classList.remove('selected'));
+      
+      // Bu seçimi işaretle
+      option.classList.add('selected');
+      
+      // Kaydet
+      await chrome.storage.local.set({ trackingMode: mode });
+      
+      console.log(`✅ Tracking mode değiştirildi: ${mode}`);
+      
+      // Bilgilendirme
+      let message = '';
+      if (mode === 'extension-only') {
+        message = 'Sadece Chrome moduna geçildi. Extension yalnızca Chrome açıkken fiyatları kontrol edecek.';
+      } else if (mode === 'hybrid') {
+        message = 'Hybrid moda geçildi. Chrome açıkken 1 dakikada bir, kapalıyken günde 1 kere kontrol edilecek.';
+      } else if (mode === 'backend-only') {
+        message = 'Backend moduna geçildi. Günde 1 kere otomatik kontrol yapılacak.';
+      }
+      
+      await showAlert(message, 'Mod Değiştirildi', 'success');
     });
   });
   
