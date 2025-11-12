@@ -737,7 +737,9 @@ async function loadTelegramStatus() {
 }
 
 // QR Kod göster ve bağlantı başlat
-document.getElementById('telegram-connect-btn').addEventListener('click', async () => {
+const telegramConnectBtn = document.getElementById('telegram-connect-btn');
+if (telegramConnectBtn) {
+  telegramConnectBtn.addEventListener('click', async () => {
   try {
     // Backend'den kod al
     const response = await fetch(`${BACKEND_URL}/api/generate-code`);
@@ -750,14 +752,23 @@ document.getElementById('telegram-connect-btn').addEventListener('click', async 
     
     const { code, qrUrl } = data;
     
-    // QR kodu göster
+    // QR kodu göster (eski HTML için)
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrUrl)}`;
-    document.getElementById('qr-code-image').src = qrCodeUrl;
-    document.getElementById('bot-link').href = qrUrl;
+    const qrImage = document.getElementById('qr-code-image');
+    const botLink = document.getElementById('bot-link');
+    const qrContainer = document.getElementById('qr-container');
+    const qrWaiting = document.getElementById('qr-waiting');
     
-    // UI değiştir
-    document.getElementById('qr-container').style.display = 'none';
-    document.getElementById('qr-waiting').style.display = 'block';
+    if (qrImage) qrImage.src = qrCodeUrl;
+    if (botLink) botLink.href = qrUrl;
+    if (qrContainer) qrContainer.style.display = 'none';
+    if (qrWaiting) qrWaiting.style.display = 'block';
+    
+    // Yeni HTML için QR display
+    const qrDisplay = document.getElementById('qr-display');
+    if (qrDisplay) {
+      qrDisplay.innerHTML = `<img src="${qrCodeUrl}" alt="QR Code" style="display: block; margin: 20px auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">`;
+    }
     
     // Polling başlat
     startPolling(code);
@@ -765,7 +776,8 @@ document.getElementById('telegram-connect-btn').addEventListener('click', async 
   } catch (error) {
     await showAlert(`Backend'e bağlanılamadı: ${error.message}\n\nBackend çalıştığından emin olun!`, 'Hata', 'error');
   }
-});
+  });
+}
 
 // Polling başlat
 function startPolling(code) {
@@ -814,32 +826,44 @@ function stopPolling() {
   }
 }
 
-// QR UI'ı sıfırla
+// QR UI'ı sıfırla (eski HTML için)
 function resetQRUI() {
-  document.getElementById('qr-container').style.display = 'block';
-  document.getElementById('qr-waiting').style.display = 'none';
-  document.getElementById('qr-code-image').src = '';
+  const qrContainer = document.getElementById('qr-container');
+  const qrWaiting = document.getElementById('qr-waiting');
+  const qrImage = document.getElementById('qr-code-image');
+  
+  if (qrContainer) qrContainer.style.display = 'block';
+  if (qrWaiting) qrWaiting.style.display = 'none';
+  if (qrImage) qrImage.src = '';
 }
 
-// İptal butonu
-document.getElementById('qr-cancel-btn').addEventListener('click', () => {
-  stopPolling();
-  resetQRUI();
-});
+// İptal butonu (eski HTML için)
+const qrCancelBtn = document.getElementById('qr-cancel-btn');
+if (qrCancelBtn) {
+  qrCancelBtn.addEventListener('click', () => {
+    stopPolling();
+    resetQRUI();
+  });
+}
 
 // Bağlantıyı kes
-document.getElementById('telegram-disconnect-btn').addEventListener('click', async () => {
-  const confirmed = await showConfirm('Telegram bağlantısını kesmek istediğinize emin misiniz?');
-  
-  if (confirmed) {
-    await chrome.storage.local.remove(['telegramChatId', 'telegramBotToken']);
-    await showAlert('Telegram bağlantısı kesildi.', 'Bilgi', 'info');
-    loadTelegramStatus();
-  }
-});
+const telegramDisconnectBtn = document.getElementById('telegram-disconnect-btn');
+if (telegramDisconnectBtn) {
+  telegramDisconnectBtn.addEventListener('click', async () => {
+    const confirmed = await showConfirm('Telegram bağlantısını kesmek istediğinize emin misiniz?');
+    
+    if (confirmed) {
+      await chrome.storage.local.remove(['telegramChatId', 'telegramBotToken']);
+      await showAlert('Telegram bağlantısı kesildi.', 'Bilgi', 'info');
+      loadTelegramStatus();
+    }
+  });
+}
 
 // Test bildirimi gönder
-document.getElementById('telegram-test-connected-btn').addEventListener('click', async () => {
+const telegramTestBtn = document.getElementById('telegram-test-connected-btn');
+if (telegramTestBtn) {
+  telegramTestBtn.addEventListener('click', async () => {
   const data = await chrome.storage.local.get(['telegramChatId', 'telegramBotToken']);
   
   if (!data.telegramChatId || !data.telegramBotToken) {
@@ -878,7 +902,8 @@ document.getElementById('telegram-test-connected-btn').addEventListener('click',
     testButton.textContent = originalText;
     testButton.disabled = false;
   }
-});
+  });
+}
 
 // ==========================================
 // TRACKING MODE YÖNETİMİ
