@@ -363,6 +363,16 @@ function handleClick(e) {
         <small>Fiyat: ${price || 'Bulunamadı'}</small><br>
         <small style="opacity:0.7">Toplam ${trackers.length} ürün takipte</small>
       `;
+      
+      // Backend'e sync et
+      chrome.runtime.sendMessage({
+        action: 'syncTrackerToBackend',
+        tracker: trackerData
+      }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.warn('Backend sync mesajı gönderilemedi:', chrome.runtime.lastError.message);
+        }
+      });
     });
   });
   

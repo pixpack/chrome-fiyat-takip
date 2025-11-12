@@ -452,6 +452,17 @@ async function removeTracker(id) {
     const filtered = trackers.filter(t => t.id !== id);
     chrome.storage.local.set({ trackers: filtered }, () => {
       console.log('✅ Tracker silindi:', tracker?.productName);
+      
+      // Backend'den sil
+      chrome.runtime.sendMessage({
+        action: 'removeTrackerFromBackend',
+        trackerId: id
+      }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.warn('Backend remove mesajı gönderilemedi:', chrome.runtime.lastError.message);
+        }
+      });
+      
       showAlert('Ürün başarıyla takipten çıkarıldı.', 'Ürün Silindi', 'success');
       loadTrackedProducts();
     });

@@ -1,5 +1,93 @@
 console.log('🚀 Background script başlatıldı!');
 
+// ==========================================
+// BACKEND SYNC FONKSİYONLARI
+// ==========================================
+
+const BACKEND_URL = 'https://chrome-fiyat-v1.vercel.app';
+
+// Tracker'ı backend'e kaydet
+async function syncTrackerToBackend(tracker) {
+  try {
+    // Tracking mode kontrol et
+    const settings = await chrome.storage.local.get(['trackingMode', 'telegramChatId']);
+    const mode = settings.trackingMode || 'hybrid';
+    const chatId = settings.telegramChatId;
+    
+    // Extension-only modunda backend'e kaydetme
+    if (mode === 'extension-only') {
+      console.log('📵 Extension-only mode, backend sync atlandı');
+      return;
+    }
+    
+    // Chat ID yoksa kaydetme
+    if (!chatId) {
+      console.log('⚠️ Telegram bağlı değil, backend sync atlandı');
+      return;
+    }
+    
+    // Backend'e gönder
+    const response = await fetch(`${BACKEND_URL}/api/tracker/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chatId, tracker })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('✅ Tracker backend\'e kaydedildi:', tracker.productName);
+    } else {
+      console.error('❌ Backend sync hatası:', data.error);
+    }
+  } catch (error) {
+    console.error('❌ Backend sync hatası:', error);
+  }
+}
+
+// Tracker'ı backend'den sil
+async function removeTrackerFromBackend(trackerId) {
+  try {
+    // Tracking mode kontrol et
+    const settings = await chrome.storage.local.get(['trackingMode', 'telegramChatId']);
+    const mode = settings.trackingMode || 'hybrid';
+    const chatId = settings.telegramChatId;
+    
+    // Extension-only modunda backend'e kaydetme
+    if (mode === 'extension-only') {
+      console.log('📵 Extension-only mode, backend remove atlandı');
+      return;
+    }
+    
+    // Chat ID yoksa
+    if (!chatId) {
+      console.log('⚠️ Telegram bağlı değil, backend remove atlandı');
+      return;
+    }
+    
+    // Backend'den sil
+    const response = await fetch(`${BACKEND_URL}/api/tracker/remove`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chatId, trackerId })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log('✅ Tracker backend\'den silindi:', trackerId);
+    } else {
+      console.error('❌ Backend remove hatası:', data.error);
+    }
+  } catch (error) {
+    console.error('❌ Backend remove hatası:', error);
+  }
+}
+
+// ==========================================
+// OFFSCREEN DOCUMENT FONKSİYONLARI
+// ==========================================
+
 // Offscreen Document helper fonksiyonları
 async function setupOffscreenDocument() {
   const existingContexts = await chrome.runtime.getContexts({
@@ -103,6 +191,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     handleElementSelected(request.data);
     sendResponse({ success: true, message: 'Ürün eklendi!' });
     return true;
+  }
+  
+  if (request.action === 'syncTrackerToBackend') {
+    console.log('🔄 Backend sync isteği alındı');
+    syncTrackerToBackend(request.tracker).then(() => {
+      sendResponse({ success: true });
+    }).catch(error => {
+      sendResponse({ success: false, error: error.message });
+    });
+    return true; // Async response için
+  }
+  
+  if (request.action === 'removeTrackerFromBackend') {
+    console.log('🗑️ Backend remove isteği alındı');
+    removeTrackerFromBackend(request.trackerId).then(() => {
+      sendResponse({ success: true });
+    }).catch(error => {
+      sendResponse({ success: false, error: error.message });
+    });
+    return true; // Async response için
   }
   
   return true;
