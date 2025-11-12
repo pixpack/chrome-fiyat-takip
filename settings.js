@@ -202,7 +202,12 @@ function createProductCard(tracker) {
     
     <!-- Price -->
     <div style="text-align: center; min-width: 120px; flex-shrink: 0;">
-      <div style="font-size: 1.5rem; font-weight: 700; color: #dc2626; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)}</div>
+      ${latestPrice.price < previousPrice.price ? 
+        `<div style="font-size: 1.5rem; font-weight: 700; color: #10b981; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)} ↓</div>` :
+        latestPrice.price > previousPrice.price ?
+        `<div style="font-size: 1.5rem; font-weight: 700; color: #dc2626; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)} ↑</div>` :
+        `<div style="font-size: 1.5rem; font-weight: 700; color: #6b7280; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)}</div>`
+      }
       <div style="font-size: 0.875rem; color: #6b7280;">${formatPrice(previousPrice.price, tracker.currency)}</div>
     </div>
     

@@ -6,73 +6,79 @@
   <title>Fiyat Takip</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body {
-      width: 380px;
+      width: 400px;
       min-height: 500px;
       max-height: 600px;
-      font-family: 'JetBrains Mono', monospace;
-      background: #F5F1EA;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'JetBrains Mono', monospace, sans-serif;
+      background: #f5f7fa;
       color: #1F2937;
     }
     
     /* Header */
     .header {
-      background: white;
-      padding: 20px;
-      border-bottom: 2px solid #E5E7EB;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 24px 20px;
+      border-bottom: none;
     }
     
     .header h1 {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
-      color: #111827;
-      margin-bottom: 4px;
+      color: white;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     
     .header p {
-      font-size: 11px;
-      color: #6B7280;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 400;
     }
     
     /* Tabs */
     .tabs {
       display: flex;
       background: white;
-      border-bottom: 2px solid #E5E7EB;
-      padding: 0 20px;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     
     .tab {
       flex: 1;
-      padding: 12px 16px;
+      padding: 14px 16px;
       background: transparent;
       border: none;
-      border-bottom: 3px solid transparent;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+      border-bottom: 2px solid transparent;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
       font-weight: 600;
-      color: #9CA3AF;
+      color: #6b7280;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
     
     .tab:hover {
-      color: #6B7280;
-      background: #F9FAFB;
+      color: #374151;
+      background: #f9fafb;
     }
     
     .tab.active {
-      color: #E85D4A;
-      border-bottom-color: #E85D4A;
+      color: #667eea;
+      border-bottom-color: #667eea;
+      background: #fafbff;
     }
     
     .tab .material-icons-outlined {
@@ -80,18 +86,19 @@
     }
     
     .tab-count {
-      background: #F3F4F6;
-      color: #6B7280;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 8px;
-      min-width: 20px;
+      background: #e5e7eb;
+      color: #6b7280;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      min-width: 22px;
       text-align: center;
+      font-weight: 600;
     }
     
     .tab.active .tab-count {
-      background: #FEE2E2;
-      color: #E85D4A;
+      background: #ede9fe;
+      color: #667eea;
     }
     
     .tab-content {
@@ -274,31 +281,32 @@
     
     .notification-card {
       background: white;
-      border-radius: 8px;
-      padding: 12px;
-      border-left: 4px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 14px;
+      border-left: 3px solid #e5e7eb;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
       display: flex;
-      gap: 10px;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     }
     
     .notification-card.unread {
-      border-left-color: #E85D4A;
-      background: #FFF5F5;
+      border-left-color: #667eea;
+      background: #fafbff;
     }
     
     .notification-card:hover {
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      transform: translateX(2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
     }
     
     .notification-card.basket-discount {
-      border-left-color: #10B981;
+      border-left-color: #10b981;
     }
     
     .notification-card.basket-discount.unread {
-      background: #ECFDF5;
+      background: #f0fdf4;
     }
     
     .notification-icon {
@@ -426,8 +434,11 @@
 <body>
   <!-- Header -->
   <div class="header">
-    <h1>Fiyat Takip</h1>
-    <p>Ürün fiyatlarını otomatik takip edin</p>
+    <h1>
+      <span class="material-icons-outlined" style="font-size: 24px;">trending_down</span>
+      Fiyat Takip
+    </h1>
+    <p>Ürün fiyatlarını otomatik takip edin ve indirimlerden haberdar olun</p>
   </div>
   
   <!-- Main Action -->
