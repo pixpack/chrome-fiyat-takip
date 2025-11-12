@@ -685,7 +685,7 @@ function parsePrice(priceStr) {
 // TELEGRAM AYARLARI (OTOMATİK SİSTEM)
 // ==========================================
 
-const BACKEND_URL = 'http://localhost:3000'; // DEĞİŞTİR: Production URL'i buraya yaz
+const BACKEND_URL = 'https://chrome-fiyat-v1.vercel.app'; // Vercel Production URL
 const BOT_TOKEN = '8542587696:AAEOfEAL1YAUep4IoVnFzTG58bCKWiOxufY';
 const BOT_USERNAME = 'Fiyatci_bot';
 

@@ -555,7 +555,9 @@ async function checkSingleTracker(trackerId) {
               // Telegram bildirimi gönder
               const priceIcon = price < lastPrice.price ? '📉' : '📈';
               const priceChangeText = price < lastPrice.price ? 'DÜŞTÜ' : 'ARTTI';
-              const telegramMessage = `${priceIcon} <b>FİYAT ${priceChangeText}!</b>\n\n<b>${tracker.productName}</b>\n\n💰 Eski Fiyat: ${formatPrice(lastPrice.price, tracker.currency)}\n💰 Yeni Fiyat: ${formatPrice(price, tracker.currency)}\n${priceIcon} Değişim: ${formatPrice(Math.abs(priceChange), tracker.currency)} (${Math.abs(percentage).toFixed(1)}%)\n\n${tracker.url}`;
+              const priceChangeAmount = price - lastPrice.price; // Mutlak değişim
+              const percentage = ((price - lastPrice.price) / lastPrice.price * 100); // Yüzde
+              const telegramMessage = `${priceIcon} <b>FİYAT ${priceChangeText}!</b>\n\n<b>${tracker.productName}</b>\n\n💰 Eski Fiyat: ${formatPrice(lastPrice.price, tracker.currency)}\n💰 Yeni Fiyat: ${formatPrice(price, tracker.currency)}\n${priceIcon} Değişim: ${formatPrice(Math.abs(priceChangeAmount), tracker.currency)} (${Math.abs(percentage).toFixed(1)}%)\n\n${tracker.url}`;
               sendTelegramNotification(telegramMessage, tracker.url);
               
               // Bildirim geçmişine ekle
