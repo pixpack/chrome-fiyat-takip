@@ -124,6 +124,19 @@
             padding: 40px 20px;
         }
         
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
         h1 {
             font-size: 32px;
             font-weight: 700;
@@ -497,17 +510,43 @@
             </div>
         </div>
         
-        <!-- Telegram Connected -->
-        <div class="card" id="telegram-connected" style="display: none;">
-            <div class="telegram-connected">
-                <div class="telegram-info">
-                    <div class="check-icon">✓</div>
-                    <div class="telegram-text">
-                        <h2>Telegram Connected</h2>
-                        <p>Chat ID: <span id="telegram-chat-id-display"></span></p>
+        <!-- Telegram Connected & Daily Control (2 columns) -->
+        <div class="two-column-grid" id="telegram-daily-grid" style="display: none;">
+            <!-- Telegram Connected -->
+            <div class="card" id="telegram-connected">
+                <div class="telegram-connected">
+                    <div class="telegram-info">
+                        <div class="check-icon">✓</div>
+                        <div class="telegram-text">
+                            <h2>Telegram Connected</h2>
+                            <p>Chat ID: <span id="telegram-chat-id-display"></span></p>
+                        </div>
                     </div>
+                    <button class="disconnect-btn" id="telegram-disconnect-btn">Disconnect</button>
                 </div>
-                <button class="disconnect-btn" id="telegram-disconnect-btn">Disconnect</button>
+            </div>
+            
+            <!-- Daily Control Time -->
+            <div class="card" id="daily-control-card">
+                <div class="card-title">
+                    <span class="card-title-icon">🕐</span>
+                    <h2>Daily Control Time</h2>
+                </div>
+                
+                <div class="time-setting">
+                    <p class="time-label">Daily backend check is set to: <span>12:00 (Noon)</span></p>
+                    <select class="time-select" id="daily-check-hour">
+                        <option value="12">12:00 (Noon)</option>
+                        <option value="0">00:00 (Midnight)</option>
+                        <option value="6">06:00 (Morning)</option>
+                        <option value="9">09:00 (Morning)</option>
+                        <option value="15">15:00 (Afternoon)</option>
+                        <option value="18">18:00 (Evening)</option>
+                        <option value="21">21:00 (Night)</option>
+                    </select>
+                </div>
+                
+                <p class="time-note">Vercel backend'i her gün saat 12:00'de tüm fiyatları kontrol eder. Chrome açıkken extension 1 dakikada bir otomatik kontrol yapar.</p>
             </div>
         </div>
         
@@ -569,31 +608,8 @@
             
             <div class="info-box">
                 <span class="info-icon">ℹ️</span>
-                <p class="info-text">Vercel ücretsiz planı günde 1 backend kontrol sağlar (12:00). Chrome açıkken extension 1 dakikada bir kontrol eder.</p>
+                <p class="info-text">Chrome açıkken her dakika, kapalıyken günde bir kez (öğlen 12:00) fiyatları kontrol ederiz. Böylece hiçbir fırsat kaçırmaz, her zaman en güncel fiyatları takip edersiniz!</p>
             </div>
-        </div>
-        
-        <!-- Daily Control Time -->
-        <div class="card" id="daily-control-card" style="display: none;">
-            <div class="card-title">
-                <span class="card-title-icon">🕐</span>
-                <h2>Daily Control Time</h2>
-            </div>
-            
-            <div class="time-setting">
-                <p class="time-label">Daily backend check is set to: <span>12:00 (Noon)</span></p>
-                <select class="time-select" id="daily-check-hour">
-                    <option value="12">12:00 (Noon)</option>
-                    <option value="0">00:00 (Midnight)</option>
-                    <option value="6">06:00 (Morning)</option>
-                    <option value="9">09:00 (Morning)</option>
-                    <option value="15">15:00 (Afternoon)</option>
-                    <option value="18">18:00 (Evening)</option>
-                    <option value="21">21:00 (Night)</option>
-                </select>
-            </div>
-            
-            <p class="time-note">Vercel backend'i her gün saat 12:00'de tüm fiyatları kontrol eder. Chrome açıkken extension 1 dakikada bir otomatik kontrol yapar.</p>
         </div>
         
         <!-- Test Button -->

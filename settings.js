@@ -708,30 +708,27 @@ async function loadTelegramStatus() {
   
   if (data.telegramChatId) {
     // Bağlı
-    document.getElementById('telegram-not-connected').style.display = 'none';
-    document.getElementById('telegram-connected').style.display = 'block';
-    document.getElementById('telegram-chat-id-display').textContent = data.telegramChatId;
-    
-    // Ayar kartlarını göster
+    const notConnected = document.getElementById('telegram-not-connected');
+    const telegramDailyGrid = document.getElementById('telegram-daily-grid');
+    const chatIdDisplay = document.getElementById('telegram-chat-id-display');
     const settingsCard = document.getElementById('telegram-settings-card');
-    const dailyCard = document.getElementById('daily-control-card');
     const testBtn = document.getElementById('telegram-test-connected-btn');
     
+    if (notConnected) notConnected.style.display = 'none';
+    if (telegramDailyGrid) telegramDailyGrid.style.display = 'grid';
+    if (chatIdDisplay) chatIdDisplay.textContent = data.telegramChatId;
     if (settingsCard) settingsCard.style.display = 'block';
-    if (dailyCard) dailyCard.style.display = 'block';
     if (testBtn) testBtn.style.display = 'flex';
   } else {
     // Bağlı değil
-    document.getElementById('telegram-not-connected').style.display = 'block';
-    document.getElementById('telegram-connected').style.display = 'none';
-    
-    // Ayar kartlarını gizle
+    const notConnected = document.getElementById('telegram-not-connected');
+    const telegramDailyGrid = document.getElementById('telegram-daily-grid');
     const settingsCard = document.getElementById('telegram-settings-card');
-    const dailyCard = document.getElementById('daily-control-card');
     const testBtn = document.getElementById('telegram-test-connected-btn');
     
+    if (notConnected) notConnected.style.display = 'block';
+    if (telegramDailyGrid) telegramDailyGrid.style.display = 'none';
     if (settingsCard) settingsCard.style.display = 'none';
-    if (dailyCard) dailyCard.style.display = 'none';
     if (testBtn) testBtn.style.display = 'none';
   }
 }
