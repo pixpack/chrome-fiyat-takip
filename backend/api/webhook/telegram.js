@@ -8,20 +8,30 @@ const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 const BOT_TOKEN = '8542587696:AAEOfEAL1YAUep4IoVnFzTG58bCKWiOxufY';
 
 async function redisSet(key, value, expirySeconds = 600) {
-  await fetch(`${REDIS_URL}/set/${key}`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${REDIS_TOKEN}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(value)
-  });
-  
-  if (expirySeconds > 0) {
-    await fetch(`${REDIS_URL}/expire/${key}/${expirySeconds}`, {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${REDIS_TOKEN}` }
+  try {
+    console.log(`🔧 Redis SET: ${key}`, value);
+    
+    const setResponse = await fetch(`${REDIS_URL}/set/${key}/${encodeURIComponent(JSON.stringify(value))}`, {
+      headers: {
+        'Authorization': `Bearer ${REDIS_TOKEN}`
+      }
     });
+    
+    const setResult = await setResponse.json();
+    console.log('✅ Redis SET result:', setResult);
+    
+    if (expirySeconds > 0) {
+      const expireResponse = await fetch(`${REDIS_URL}/expire/${key}/${expirySeconds}`, {
+        headers: { 'Authorization': `Bearer ${REDIS_TOKEN}` }
+      });
+      const expireResult = await expireResponse.json();
+      console.log('✅ Redis EXPIRE result:', expireResult);
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('❌ Redis SET error:', error);
+    return false;
   }
 }
 
@@ -67,12 +77,18 @@ module.exports = async (req, res) => {
           // /start CODE
           const code = parts[1];
           
+          console.log(`📥 Kayıt isteği: Code=${code}, ChatID=${chatId}`);
+          
           // Redis'e kaydet
-          await redisSet(`reg:${code}`, { chatId: chatId.toString(), timestamp: Date.now() }, 600);
+          const redisSuccess = await redisSet(`reg:${code}`, { chatId: chatId.toString(), timestamp: Date.now() }, 600);
           
-          console.log(`✅ Webhook kaydı: ${code} → ${chatId}`);
-          
-          await sendTelegramMessage(chatId, '🎉 Kayıt başarılı!\n\n✅ Fiyat değişikliklerini buradan takip edebilirsiniz.\n📱 Chrome eklentisine geri dönün.');
+          if (redisSuccess) {
+            console.log(`✅ Webhook kaydı başarılı: ${code} → ${chatId}`);
+            await sendTelegramMessage(chatId, '🎉 Kayıt başarılı!\n\n✅ Fiyat değişikliklerini buradan takip edebilirsiniz.\n📱 Chrome eklentisine geri dönün.');
+          } else {
+            console.error(`❌ Redis kayıt hatası: ${code}`);
+            await sendTelegramMessage(chatId, '❌ Kayıt sırasında hata oluştu. Lütfen tekrar deneyin.');
+          }
         }
       }
     }

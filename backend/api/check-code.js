@@ -28,15 +28,21 @@ module.exports = async (req, res) => {
   }
   
   try {
+    console.log(`🔍 Checking code: ${code}`);
+    
     const registration = await redisGet(`reg:${code}`);
     
+    console.log(`📊 Redis result for reg:${code}:`, registration);
+    
     if (registration) {
+      console.log(`✅ Registration found: ${registration.chatId}`);
       return res.status(200).json({
         success: true,
         registered: true,
         chatId: registration.chatId
       });
     } else {
+      console.log(`⏳ Registration not found yet for: ${code}`);
       return res.status(200).json({
         success: true,
         registered: false,
