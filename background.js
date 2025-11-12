@@ -29,12 +29,17 @@ async function syncTrackerToBackend(tracker) {
     // Backend'e gönder
     const url = `${BACKEND_URL}/api/tracker/add`;
     console.log('🌐 Backend URL:', url);
+    console.log('🔍 URL typeof:', typeof url, 'Length:', url.length);
     console.log('📦 Gönderilen data:', { chatId, tracker: tracker.productName });
     
-    const response = await fetch(url, {
+    // Stringify body önce
+    const body = JSON.stringify({ chatId, tracker });
+    console.log('📤 Body length:', body.length);
+    
+    const response = await globalThis.fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chatId, tracker })
+      body: body
     });
     
     const data = await response.json();
@@ -70,10 +75,13 @@ async function removeTrackerFromBackend(trackerId) {
     }
     
     // Backend'den sil
-    const response = await fetch(`${BACKEND_URL}/api/tracker/remove`, {
+    const url = `${BACKEND_URL}/api/tracker/remove`;
+    const body = JSON.stringify({ chatId, trackerId });
+    
+    const response = await globalThis.fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chatId, trackerId })
+      body: body
     });
     
     const data = await response.json();
