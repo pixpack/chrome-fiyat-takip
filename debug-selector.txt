@@ -1,0 +1,52 @@
+// ============================================
+// BACKGROUND SCRIPT CONSOLE'A YAPIŞTIR!
+// (Origin PC tab'ını açık tutarken)
+// ============================================
+
+(async () => {
+  const tabs = await chrome.tabs.query({ url: '*://www.originpc.com/*' });
+  
+  if (tabs.length === 0) {
+    console.log('❌ Origin PC tab\'ı açık değil!');
+    return;
+  }
+  
+  const tab = tabs[0];
+  console.log('✅ Origin PC tab bulundu:', tab.id);
+  
+  const results = await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    func: () => {
+      const selector = 'p.text-center > strong.originpcred';
+      const elements = document.querySelectorAll(selector);
+      
+      console.log(`🔍 "${selector}" selector'ından ${elements.length} adet bulundu:`);
+      
+      const results = [];
+      elements.forEach((el, index) => {
+        const text = el.textContent.trim();
+        const priceMatch = text.match(/[\d.,]+/);
+        const price = priceMatch ? parseFloat(priceMatch[0].replace(/,/g, '')) : null;
+        
+        results.push({
+          index: index + 1,
+          text: text,
+          price: price,
+          html: el.outerHTML.substring(0, 100)
+        });
+      });
+      
+      return results;
+    }
+  });
+  
+  if (results && results[0] && results[0].result) {
+    console.log('\n📊 BULUNAN ELEMENTLER:');
+    results[0].result.forEach(item => {
+      console.log(`\n${item.index}. Element:`);
+      console.log('   Text:', item.text);
+      console.log('   Fiyat:', item.price);
+      console.log('   HTML:', item.html);
+    });
+  }
+})();

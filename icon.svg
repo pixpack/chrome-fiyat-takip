@@ -1,0 +1,6 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" fill="#4CAF50" rx="20"/>
+  <path d="M30 64 L50 40 L100 40 L100 88 L50 88 Z" fill="white" stroke="white" stroke-width="2"/>
+  <circle cx="55" cy="64" r="6" fill="#4CAF50"/>
+  <text x="64" y="75" font-family="Arial" font-size="40" font-weight="bold" fill="white" text-anchor="middle">₺</text>
+</svg>

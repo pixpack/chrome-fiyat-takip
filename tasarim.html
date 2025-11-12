@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Metrikleri - News Llama</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: #F5F1EA;
+        }
+        .coral-accent { color: #E85D4A; }
+        .coral-bg { background-color: #E85D4A; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Keşif Sistemi Metrikleri</h1>
+            <p class="text-gray-600">Otonom kaynak keşfi ve kürasyon performansı</p>
+        </div>
+
+        <!-- Scheduler Status -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold text-gray-900">Zamanlayıcı Durumu</h2>
+                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">✓ ÇALIŞIYOR</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Job 1 -->
+                <div class="border border-gray-200 rounded-lg p-4 hover:border-red-500 transition-colors">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-semibold text-gray-900">📰 Günlük Oluşturma</h3>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Bugün</span>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-2">Her gün 09:00'da</div>
+                    <div class="text-xs text-gray-500 mb-1">Sonraki çalışma: Kasım 10, 2025 09:00</div>
+                    <div class="text-xs text-gray-500">7.5 saat içinde</div>
+                </div>
+
+                <!-- Job 2 -->
+                <div class="border border-gray-200 rounded-lg p-4 hover:border-red-500 transition-colors">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-semibold text-gray-900">🔍 Haftalık Keşif</h3>
+                        <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">Zamanlanmış</span>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-2">Her Pazar 03:00'te</div>
+                    <div class="text-xs text-gray-500 mb-1">Sonraki çalışma: Kasım 16, 2025 03:00</div>
+                    <div class="text-xs text-gray-500">6.8 gün içinde</div>
+                </div>
+
+                <!-- Job 3 -->
+                <div class="border border-gray-200 rounded-lg p-4 hover:border-red-500 transition-colors">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-semibold text-gray-900">💾 Database VACUUM</h3>
+                        <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">Zamanlanmış</span>
+                    </div>
+                    <div class="text-sm text-gray-600 mb-2">Her hafta Pazar 04:00'te</div>
+                    <div class="text-xs text-gray-500 mb-1">Sonraki çalışma: Kasım 16, 2025 04:00</div>
+                    <div class="text-xs text-gray-500">6.8 gün içinde</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="text-3xl font-bold coral-accent">42</div>
+                <div class="text-sm text-gray-600 mt-1">Tier 1 Kaynaklar</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="text-3xl font-bold text-green-600">95.2%</div>
+                <div class="text-sm text-gray-600 mt-1">Sağlık Oranı</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="text-3xl font-bold text-yellow-600">8</div>
+                <div class="text-sm text-gray-600 mt-1">Kara Listedekiler</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="text-3xl font-bold text-blue-600">67.5%</div>
+                <div class="text-sm text-gray-600 mt-1">Terfi Oranı</div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Tier 1 Sources -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900">Tier 1 Kaynaklar</h2>
+                    <span class="coral-bg text-white px-3 py-1 rounded-full text-xs font-semibold">AKTİF</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Stats -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-600">Toplam Kaynak</span>
+                            <span class="text-lg font-bold">42</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-600">Sağlıklı</span>
+                            <span class="text-lg font-bold text-green-600">40</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Sağlıksız</span>
+                            <span class="text-lg font-bold text-red-600">2</span>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    <!-- By Type -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Kaynak Türüne Göre</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Reddit</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="h-2 coral-bg rounded-full" style="width: 60%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">25</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">RSS</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="h-2 coral-bg rounded-full" style="width: 30%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">12</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Web</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="h-2 coral-bg rounded-full" style="width: 12%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">5</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    <!-- Quality Score -->
+                    <div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Ort. Kalite Skoru</span>
+                            <span class="text-lg font-bold coral-accent">8.75</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blacklist -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900">Kara Liste</h2>
+                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">8 ENGELLENDİ</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- By Error Type -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Hata Türüne Göre</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">404 Not Found</span>
+                                <span class="text-sm font-semibold">3</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Timeout</span>
+                                <span class="text-sm font-semibold">2</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Rate Limited</span>
+                                <span class="text-sm font-semibold">2</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Invalid Content</span>
+                                <span class="text-sm font-semibold">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    <!-- By Source Type -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Kaynak Türüne Göre</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Web</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="h-2 bg-yellow-500 rounded-full" style="width: 62%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">5</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">RSS</span>
+                                <div class="flex items-center">
+                                    <div class="w-20 h-2 bg-gray-200 rounded-full mr-2">
+                                        <div class="h-2 bg-yellow-500 rounded-full" style="width: 38%"></div>
+                                    </div>
+                                    <span class="text-sm font-semibold">3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discovery Performance -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-900">Keşif Performansı</h2>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">ÖĞRENME</span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Stats -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-600">Toplam Keşfedildi</span>
+                            <span class="text-lg font-bold">127</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-gray-600">Otomatik Terfi</span>
+                            <span class="text-lg font-bold text-green-600">86</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Terfi Oranı</span>
+                            <span class="text-lg font-bold coral-accent">67.7%</span>
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-200">
+
+                    <!-- By Discovery Method -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Keşif Metoduna Göre</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">LLM Extraction</span>
+                                <span class="text-sm font-semibold">52</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Reddit Sidebar</span>
+                                <span class="text-sm font-semibold">38</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">Web Crawling</span>
+                                <span class="text-sm font-semibold">25</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">RSS Discovery</span>
+                                <span class="text-sm font-semibold">12</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-500 mb-2">Metrikler veritabanı durumundan hesaplandı</p>
+            <a href="#" class="coral-accent hover:underline text-sm font-semibold">← Dashboard'a Dön</a>
+        </div>
+    </div>
+</body>
+</html>

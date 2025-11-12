@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.material-icons-outlined {
+    font-family: 'Material Icons Outlined';
+    font-size: 24px;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}

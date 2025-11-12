@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fiyat Takip</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      width: 380px;
+      min-height: 500px;
+      max-height: 600px;
+      font-family: 'JetBrains Mono', monospace;
+      background: #F5F1EA;
+      color: #1F2937;
+    }
+    
+    /* Header */
+    .header {
+      background: white;
+      padding: 20px;
+      border-bottom: 2px solid #E5E7EB;
+    }
+    
+    .header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+    
+    .header p {
+      font-size: 11px;
+      color: #6B7280;
+    }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: white;
+      border-bottom: 2px solid #E5E7EB;
+      padding: 0 20px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: #9CA3AF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    
+    .tab:hover {
+      color: #6B7280;
+      background: #F9FAFB;
+    }
+    
+    .tab.active {
+      color: #E85D4A;
+      border-bottom-color: #E85D4A;
+    }
+    
+    .tab .material-icons-outlined {
+      font-size: 18px;
+    }
+    
+    .tab-count {
+      background: #F3F4F6;
+      color: #6B7280;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 8px;
+      min-width: 20px;
+      text-align: center;
+    }
+    
+    .tab.active .tab-count {
+      background: #FEE2E2;
+      color: #E85D4A;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* Main Button */
+    .main-action {
+      padding: 16px 20px;
+      background: white;
+      border-bottom: 1px solid #E5E7EB;
+    }
+    
+    #start-picker {
+      width: 100%;
+      padding: 16px;
+      background: #E85D4A;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    
+    #start-picker:hover {
+      background: #d74d3a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(232, 93, 74, 0.3);
+    }
+    
+    /* Items List */
+    .items-container {
+      padding: 16px 20px;
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    
+    .items-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .items-header h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6B7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .items-count {
+      background: #E85D4A;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+    
+    #items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    /* Item Card */
+    .item-card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      gap: 10px;
+      border: 1px solid #E5E7EB;
+      transition: all 0.2s;
+    }
+    
+    .item-card:hover {
+      border-color: #E85D4A;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    
+    .item-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: #F3F4F6;
+      flex-shrink: 0;
+    }
+    
+    .item-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .item-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    
+    .item-favicon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+    
+    .item-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #111827;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .item-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #E85D4A;
+      margin-bottom: 4px;
+    }
+    
+    .item-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    
+    .item-status.up {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+    
+    .item-status.down {
+      background: #DCFCE7;
+      color: #166534;
+    }
+    
+    .item-status.same {
+      background: #F3F4F6;
+      color: #6B7280;
+    }
+    
+    .item-status.error {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+    
+    /* Notifications */
+    .notifications-header {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    #notifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .notification-card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      border-left: 4px solid #E5E7EB;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .notification-card.unread {
+      border-left-color: #E85D4A;
+      background: #FFF5F5;
+    }
+    
+    .notification-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transform: translateX(2px);
+    }
+    
+    .notification-card.basket-discount {
+      border-left-color: #10B981;
+    }
+    
+    .notification-card.basket-discount.unread {
+      background: #ECFDF5;
+    }
+    
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    
+    .notification-icon.price-drop {
+      background: #DCFCE7;
+      color: #166534;
+    }
+    
+    .notification-icon.price-increase {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
+    
+    .notification-icon.basket-discount {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+    
+    .notification-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .notification-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .notification-product {
+      font-size: 10px;
+      color: #6B7280;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .notification-price {
+      font-size: 12px;
+      font-weight: 700;
+      color: #E85D4A;
+    }
+    
+    .notification-time {
+      font-size: 9px;
+      color: #9CA3AF;
+      margin-top: 4px;
+    }
+    
+    .notification-unread-badge {
+      width: 8px;
+      height: 8px;
+      background: #E85D4A;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+    
+    .empty-text {
+      font-size: 12px;
+      color: #9CA3AF;
+      line-height: 1.5;
+    }
+    
+    /* Footer */
+    .footer {
+      background: white;
+      padding: 12px 20px;
+      border-top: 1px solid #E5E7EB;
+      position: sticky;
+      bottom: 0;
+    }
+    
+    #open-settings {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: #6B7280;
+      border: 1px solid #D1D5DB;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    
+    #open-settings:hover {
+      background: #F9FAFB;
+      border-color: #E85D4A;
+      color: #E85D4A;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>Fiyat Takip</h1>
+    <p>Ürün fiyatlarını otomatik takip edin</p>
+  </div>
+  
+  <!-- Main Action -->
+  <div class="main-action">
+    <button id="start-picker">
+      <span class="material-icons-outlined" style="font-size: 20px;">add_shopping_cart</span>
+      Yeni Takip Ekle
+    </button>
+  </div>
+  
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="products">
+      <span class="material-icons-outlined">inventory_2</span>
+      Ürünler
+      <span class="tab-count" id="products-count">0</span>
+    </button>
+    <button class="tab" data-tab="notifications">
+      <span class="material-icons-outlined">notifications</span>
+      Bildirimler
+      <span class="tab-count" id="notifications-count">0</span>
+    </button>
+  </div>
+  
+  <!-- Products Tab -->
+  <div class="tab-content active" id="products-tab">
+    <div class="items-container">
+      <div id="items-list"></div>
+    </div>
+  </div>
+  
+  <!-- Notifications Tab -->
+  <div class="tab-content" id="notifications-tab">
+    <div class="items-container">
+      <div class="notifications-header">
+        <button id="mark-all-read" style="font-size: 11px; padding: 6px 12px; background: #F3F4F6; border: none; border-radius: 4px; cursor: pointer; color: #6B7280; font-family: 'JetBrains Mono', monospace;">
+          <span class="material-icons-outlined" style="font-size: 14px; vertical-align: middle;">done_all</span>
+          Tümünü Okundu İşaretle
+        </button>
+      </div>
+      <div id="notifications-list"></div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <div class="footer">
+    <button id="open-settings">
+      <span class="material-icons-outlined" style="font-size: 18px;">settings</span>
+      Tüm Ayarlar
+    </button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

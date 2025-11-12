@@ -1,0 +1,120 @@
+/* Chrome içi bildirim modal */
+.price-notification-overlay {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 2147483647 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  animation: slideInRight 0.3s ease-out !important;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.price-notification-card {
+  background: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
+  padding: 20px !important;
+  min-width: 320px !important;
+  max-width: 400px !important;
+  border-left: 4px solid #E85D4A !important;
+  position: relative !important;
+}
+
+.price-notification-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+.price-notification-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 8px !important;
+  background: #FEE2E2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+.price-notification-icon.up {
+  background: #FEE2E2 !important;
+  color: #991B1B !important;
+}
+
+.price-notification-icon.down {
+  background: #DCFCE7 !important;
+  color: #166534 !important;
+}
+
+.price-notification-content {
+  flex: 1 !important;
+}
+
+.price-notification-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  margin-bottom: 4px !important;
+}
+
+.price-notification-product {
+  font-size: 12px !important;
+  color: #6B7280 !important;
+  margin-bottom: 8px !important;
+  font-weight: 500 !important;
+}
+
+.price-notification-price {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #E85D4A !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.price-notification-change {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  background: #F3F4F6 !important;
+  color: #6B7280 !important;
+}
+
+.price-notification-close {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  color: #9CA3AF !important;
+  font-size: 20px !important;
+  padding: 4px !important;
+  line-height: 1 !important;
+  transition: color 0.2s !important;
+}
+
+.price-notification-close:hover {
+  color: #E85D4A !important;
+}
+
+.price-notification-time {
+  font-size: 10px !important;
+  color: #9CA3AF !important;
+  margin-top: 8px !important;
+}
