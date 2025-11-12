@@ -1,14 +1,16 @@
 # 🏷️ Fiyat Takip Chrome Eklentisi
 
-Web sitelerinden fiyat takibi yapmanızı sağlayan Chrome eklentisi.
+Web sitelerinden fiyat takibi yapmanızı sağlayan basit ve hızlı Chrome eklentisi.
 
 ## Özellikler
 
 - ✅ Herhangi bir web sitesinden CSS seçici ile fiyat çekme
-- ✅ Fiyat geçmişi tutma
-- ✅ Otomatik fiyat kontrolü (saatlik)
-- ✅ Fiyat değişikliğinde bildirim
+- ✅ Fiyat geçmişi tutma ve görselleştirme
+- ✅ Otomatik fiyat kontrolü (Chrome açıkken her 1 dakikada)
+- ✅ Fiyat değişikliğinde Chrome bildirimi
 - ✅ Çoklu ürün takibi
+- ✅ Sepet/indirim fiyatı tespiti (Trendyol, Hepsiburada, Amazon)
+- ✅ Tamamen ücretsiz ve backend gerektirmez
 
 ## Kurulum
 
@@ -64,10 +66,11 @@ Eklentide "Manuel Ekle" bölümünü açın:
 
 ### 3. Otomatik Takip
 
-- Eklenti her saat başı fiyatları otomatik kontrol eder
-- Fiyat değiştiğinde bildirim gönderir
+- Chrome açıkken eklenti her 1 dakikada fiyatları otomatik kontrol eder
+- Fiyat değiştiğinde Chrome bildirimi gönderir
 - Tüm fiyat geçmişi saklanır
 - Ürün resimleri ve favicon'lar görsel takip için kullanılır
+- Sepet/indirim fiyatları otomatik tespit edilir (desteklenen sitelerde)
 
 ## İkon Oluşturma
 
@@ -89,12 +92,17 @@ convert -background none icon.svg -resize 128x128 icon128.png
 ```
 chrome-eklenti/
 ├── manifest.json       # Eklenti yapılandırması
-├── popup.html          # Eklenti arayüzü
-├── popup.js            # Arayüz mantığı
-├── content.js          # Sayfa içi script
-├── background.js       # Arka plan işlemleri
-├── icon.svg            # Vektör ikon
-└── icon*.png          # PNG ikonlar (oluşturulacak)
+├── popup.html          # Ana arayüz
+├── popup.js            # Ana arayüz mantığı
+├── settings.html       # Ayarlar sayfası
+├── settings.js         # Ayarlar mantığı
+├── content.js          # Sayfa içi script (element seçici)
+├── background.js       # Arka plan işlemleri (fiyat kontrolü)
+├── offscreen.html      # Offscreen document
+├── offscreen.js        # Görünmez DOM parsing
+├── icon16.png          # 16x16 ikon
+├── icon48.png          # 48x48 ikon
+└── icon128.png         # 128x128 ikon
 ```
 
 ## Sorun Giderme
@@ -110,7 +118,8 @@ chrome-eklenti/
 
 **Bildirimler gelmiyor:**
 - Chrome bildirim izinlerini kontrol edin
-- Eklentinin saatlik kontrollerini bekleyin
+- Chrome açık olduğundan emin olun (her 1 dakikada kontrol eder)
+- Settings sayfasında ürünün bildirim ayarını kontrol edin
 
 ## Geliştirme
 
@@ -118,7 +127,15 @@ Kodu değiştirdikten sonra:
 1. `chrome://extensions/` sayfasına gidin
 2. Eklentinin yanındaki yenile ikonuna tıklayın
 
+## Desteklenen Siteler
+
+Extension herhangi bir web sitesinde çalışır, ancak aşağıdaki sitelerde özel özellikler vardır:
+
+- **Trendyol** - İndirimli fiyat tespiti
+- **Hepsiburada** - Sepet fiyatı tespiti  
+- **Amazon** - Sepet/indirim fiyatı tespiti
+- **Origin PC** - Çoklu fiyat seçeneklerinde doğru fiyat seçimi
+
 ## Lisans
 
 MIT
-# Trigger deploy
