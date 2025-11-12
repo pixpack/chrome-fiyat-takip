@@ -970,6 +970,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tracking mode'u yükle
   loadTrackingMode();
   
+  // Telegram durumunu yükle
+  loadTelegramStatus();
+  
   // Günlük kontrol saati değişikliğini dinle
   const hourSelect = document.getElementById('daily-check-hour');
   if (hourSelect) {
@@ -999,6 +1002,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-// Sayfa yüklendiğinde Telegram durumunu yükle
-loadTelegramStatus();
