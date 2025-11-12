@@ -228,7 +228,7 @@
                                 </div>
                                 <div class="text-sm text-gray-600 mt-1">
                                     • Chrome açıkken: 1 dakikada bir<br>
-                                    • Chrome kapalıyken: Günde 1 kere (12:00)<br>
+                                    • Chrome kapalıyken: Günde 1 kere<br>
                                     • Backend'de 7/24 yedek kontrol
                                 </div>
                             </div>
@@ -251,6 +251,38 @@
                         <div class="flex gap-2 text-sm text-yellow-800">
                             <span class="material-icons-outlined" style="color: #f59e0b; font-size: 18px;">info</span>
                             <p><strong>Not:</strong> Vercel ücretsiz planı günde 1 backend kontrol sağlar. Pro plan ile dakikada 1 kereye çıkarabilirsiniz.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Günlük Kontrol Saati -->
+                <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="material-icons-outlined" style="color: #9333ea; font-size: 24px;">schedule</span>
+                        <h4 class="font-bold text-gray-900">Günlük Kontrol Saati</h4>
+                    </div>
+                    
+                    <div class="flex items-center gap-3 mb-3">
+                        <select id="daily-check-hour" class="flex-1 px-4 py-2 bg-white border-2 border-purple-300 rounded-lg font-semibold text-gray-900 focus:outline-none focus:border-purple-500">
+                            <option value="0">00:00 (Gece Yarısı)</option>
+                            <option value="3">03:00 (Gece)</option>
+                            <option value="6">06:00 (Sabah)</option>
+                            <option value="9">09:00 (Sabah)</option>
+                            <option value="12" selected>12:00 (Öğle)</option>
+                            <option value="15">15:00 (Öğleden Sonra)</option>
+                            <option value="18">18:00 (Akşam)</option>
+                            <option value="21">21:00 (Gece)</option>
+                        </select>
+                        <span class="text-gray-600 text-sm">(Türkiye Saati)</span>
+                    </div>
+                    
+                    <div class="bg-purple-100 border border-purple-300 rounded-lg p-3">
+                        <div class="flex gap-2 text-sm text-purple-900">
+                            <span class="material-icons-outlined" style="color: #9333ea; font-size: 18px;">info</span>
+                            <div>
+                                <p class="font-semibold mb-1">Şu anda: Sabit saat (12:00)</p>
+                                <p class="text-xs">Vercel ücretsiz planı tüm kullanıcılar için günde 1 kere (12:00) kontrol yapar. Seçtiğiniz saat tercihiniz olarak kaydedilir ve Pro plana geçildiğinde aktif olur.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

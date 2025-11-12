@@ -896,6 +896,35 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Tracking mode'u yükle
   loadTrackingMode();
+  
+  // Günlük kontrol saati değişikliğini dinle
+  const hourSelect = document.getElementById('daily-check-hour');
+  if (hourSelect) {
+    // Kaydedilmiş saati yükle
+    chrome.storage.local.get(['dailyCheckHour'], (data) => {
+      const savedHour = data.dailyCheckHour || 12; // Varsayılan: 12:00
+      hourSelect.value = savedHour;
+    });
+    
+    // Değişikliği dinle
+    hourSelect.addEventListener('change', async (e) => {
+      const hour = parseInt(e.target.value);
+      
+      // Kaydet
+      await chrome.storage.local.set({ dailyCheckHour: hour });
+      
+      console.log(`⏰ Günlük kontrol saati değiştirildi: ${hour}:00`);
+      
+      // Saat formatla
+      const hourText = hour.toString().padStart(2, '0') + ':00';
+      
+      await showAlert(
+        `⏰ Tercih edilen saat: ${hourText}\n\n💡 Not: Şu anda backend sabit saatte (12:00) çalışıyor. Seçiminiz Pro plana geçildiğinde aktif olacak.`,
+        'Saat Tercihi Kaydedildi',
+        'success'
+      );
+    });
+  }
 });
 
 // Sayfa yüklendiğinde Telegram durumunu yükle
