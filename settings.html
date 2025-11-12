@@ -741,6 +741,54 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div id="settings-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 1rem; padding: 2rem; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.5rem; font-weight: 700; color: #111827;">Fiyat Takip Ayarları</h2>
+                <button id="modal-close-btn" class="hover-gray-btn-light" style="background: transparent; border: none; cursor: pointer; padding: 0.5rem; border-radius: 0.25rem;">
+                    <span class="material-icons-outlined" style="font-size: 24px; color: #6b7280;">close</span>
+                </button>
+            </div>
+
+            <div id="modal-product-name" style="font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 1.5rem; padding: 1rem; background: #f9fafb; border-radius: 0.5rem;"></div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem;">Kontrol Sıklığı</label>
+                <select id="check-interval" style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; background: white; cursor: pointer;">
+                    <option value="1">1 dakika</option>
+                    <option value="5">5 dakika</option>
+                    <option value="10">10 dakika</option>
+                    <option value="15">15 dakika</option>
+                    <option value="30">30 dakika</option>
+                    <option value="60" selected>1 saat</option>
+                    <option value="120">2 saat</option>
+                    <option value="240">4 saat</option>
+                    <option value="360">6 saat</option>
+                    <option value="720">12 saat</option>
+                    <option value="1440">24 saat</option>
+                </select>
+                <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.5rem;">Fiyat kontrolü bu sürede bir yapılacak</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: flex; align-items: center; cursor: pointer;">
+                    <input type="checkbox" id="enable-notifications" style="width: 1.25rem; height: 1.25rem; margin-right: 0.75rem; cursor: pointer;">
+                    <span style="font-size: 0.875rem; font-weight: 600; color: #374151;">Fiyat düşünce bildirim gönder</span>
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button id="modal-cancel-btn" class="hover-gray-btn" style="padding: 0.75rem 1.5rem; background: white; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; color: #374151; cursor: pointer;">
+                    İptal
+                </button>
+                <button id="modal-save-btn" class="coral-bg hover-btn" style="padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; color: white; cursor: pointer;">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="settings.js"></script>
 </body>
 </html>
