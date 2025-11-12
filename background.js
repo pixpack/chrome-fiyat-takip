@@ -27,7 +27,11 @@ async function syncTrackerToBackend(tracker) {
     }
     
     // Backend'e gönder
-    const response = await fetch(`${BACKEND_URL}/api/tracker/add`, {
+    const url = `${BACKEND_URL}/api/tracker/add`;
+    console.log('🌐 Backend URL:', url);
+    console.log('📦 Gönderilen data:', { chatId, tracker: tracker.productName });
+    
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ chatId, tracker })
