@@ -96,6 +96,12 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+  
+  // Tab sistemini başlat
+  initTabSystem();
+  
+  // Tracking mode sistemini başlat
+  initTrackingMode();
 });
 
 function loadTrackedProducts() {
@@ -934,8 +940,7 @@ async function loadTrackingMode() {
 // TAB SİSTEMİ
 // ==========================================
 
-// Tab switching
-document.addEventListener('DOMContentLoaded', () => {
+function initTabSystem() {
   // Tab butonlarına click event ekle
   const tabButtons = document.querySelectorAll('.tab-button');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -956,14 +961,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-});
+}
 
 // ==========================================
 // TRACKING MODE & SETTINGS
 // ==========================================
 
-// Tracking mode değişikliğini dinle
-document.addEventListener('DOMContentLoaded', () => {
+function initTrackingMode() {
   // Eski radio button sistemi
   const radios = document.querySelectorAll('input[name="trackingMode"]');
   
@@ -1023,12 +1027,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  // Tracking mode'u yükle
-  loadTrackingMode();
-  
-  // Telegram durumunu yükle
-  loadTelegramStatus();
-  
   // Günlük kontrol saati değişikliğini dinle
   const hourSelect = document.getElementById('daily-check-hour');
   if (hourSelect) {
@@ -1057,4 +1055,12 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     });
   }
-});
+  
+  // Tracking mode'u yükle
+  loadTrackingMode();
+  
+  // Telegram durumunu yükle
+  loadTelegramStatus();
+}
+
+
