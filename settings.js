@@ -172,25 +172,12 @@ function loadSummaryStats(trackers) {
 
 function createProductCard(tracker) {
   const div = document.createElement('div');
-  div.style.cssText = 'background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 1rem;';
+  div.style.cssText = 'background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; display: flex; align-items: center; gap: 1rem;';
   div.dataset.trackerId = tracker.id;
   
   const latestPrice = tracker.priceHistory[tracker.priceHistory.length - 1];
   const previousPrice = tracker.priceHistory.length > 1 ? 
     tracker.priceHistory[tracker.priceHistory.length - 2] : latestPrice;
-  
-  // Tab kapalı uyarısı
-  const tabClosedWarning = tracker.tabClosed ? `
-    <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 0.75rem; margin-bottom: 1rem; border-radius: 0.25rem;">
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <span class="material-icons-outlined" style="color: #F59E0B; font-size: 20px;">warning</span>
-        <div>
-          <div style="font-weight: 600; color: #92400E; font-size: 0.875rem;">Tab Kapalı</div>
-          <div style="color: #78350F; font-size: 0.75rem;">Fiyat güncellenemedi. Ürün sayfasını açın.</div>
-        </div>
-      </div>
-    </div>
-  ` : '';
   
   // Calculate price range and position
   const minPrice = Math.min(...tracker.priceHistory.map(p => p.price));
@@ -199,11 +186,11 @@ function createProductCard(tracker) {
   const currentPosition = priceRange > 0 ? ((latestPrice.price - minPrice) / priceRange) * 100 : 50;
 
   const imageHtml = tracker.productImage ? 
-    `<img alt="${tracker.productName}" style="width: 5rem; height: 5rem; object-fit: cover; border-radius: 0.375rem;" src="${tracker.productImage}" onerror="this.outerHTML='<div style=\\'width: 5rem; height: 5rem; background: #e5e7eb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;\\'>📦</div>'">` : 
-    `<div style="width: 5rem; height: 5rem; background: #e5e7eb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">📦</div>`;
+    `<img alt="${tracker.productName}" style="width: 64px; height: 64px; object-fit: cover; border-radius: 0.375rem;" src="${tracker.productImage}" onerror="this.outerHTML='<div style=\\'width: 64px; height: 64px; background: #e5e7eb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;\\'>📦</div>'">` : 
+    `<div style="width: 64px; height: 64px; background: #e5e7eb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">📦</div>`;
 
   const faviconHtml = tracker.favicon ? 
-    `<img alt="favicon" style="width: 1rem; height: 1rem; display: inline-block; margin-right: 0.25rem;" src="${tracker.favicon}" onerror="this.style.display='none'">` : '';
+    `<img alt="favicon" style="width: 20px; height: 20px; display: inline-block; margin-right: 0.25rem; vertical-align: middle;" src="${tracker.favicon}" onerror="this.style.display='none'">` : '';
 
   const formattedDate = new Date(latestPrice.date).toLocaleDateString('tr-TR', {
     day: '2-digit',
@@ -215,84 +202,56 @@ function createProductCard(tracker) {
   });
   
   div.innerHTML = `
-    <div>
-      ${tabClosedWarning}
-      <div class="flex items-center" style="gap: 1rem;">
-        <!-- Product Image -->
-        <div style="flex-shrink: 0;">
-          ${imageHtml}
-        </div>
-      
-      <!-- Product Info -->
-      <div style="flex: 1; min-width: 200px; max-width: 300px;">
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-          ${faviconHtml}
-          <a href="${tracker.url}" target="_blank" style="color: #4b5563; font-size: 0.875rem; font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${new URL(tracker.url).hostname}</a>
-        </div>
-        <h3 style="color: #111827; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${tracker.productName}</h3>
-        <div style="display: flex; align-items: center; gap: 0.5rem;">
-          <span style="background: #d1fae5; color: #065f46; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600;">${formattedDate}</span>
-        </div>
+    <!-- Product Image -->
+    <div style="flex-shrink: 0;">
+      ${imageHtml}
+    </div>
+    
+    <!-- Product Info -->
+    <div style="flex: 1; min-width: 0;">
+      <div style="display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem;">
+        ${faviconHtml}
+        <a href="${tracker.url}" target="_blank" style="color: #1f2937; font-size: 0.875rem; font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${new URL(tracker.url).hostname}</a>
       </div>
-      
-      <!-- Price Info -->
-      <div style="display: flex; align-items: center; gap: 2rem; flex-shrink: 0;">
-        <div style="text-align: right; min-width: 100px;">
-          <div class="coral-accent" style="font-size: 1.5rem; font-weight: 700; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)}</div>
-          ${latestPrice.basketPrice ? `<div style="font-size: 0.875rem; color: #10b981; font-weight: 600; display: flex; align-items: center; justify-content: flex-end; gap: 0.25rem;">
-            <span class="material-icons-outlined" style="font-size: 14px;">${tracker.url.includes('trendyol.com') ? 'local_offer' : tracker.url.includes('amazon.com.tr') ? 'inventory_2' : 'shopping_cart'}</span>
-            ${formatPrice(latestPrice.basketPrice, tracker.currency)}
-            <span style="color: #059669; font-size: 0.75rem;">-${((latestPrice.price - latestPrice.basketPrice) / latestPrice.price * 100).toFixed(0)}%</span>
-          </div>` : `<div style="font-size: 0.875rem; color: #6b7280; text-decoration: line-through;">${formatPrice(previousPrice.price, tracker.currency)}</div>`}
-        </div>
-        
-        <!-- Price Progress -->
-        <div style="display: flex; align-items: center; gap: 0.5rem; min-width: 300px;">
-          <span style="font-size: 0.875rem; font-weight: 600; color: #374151;">${formatPrice(minPrice, tracker.currency)}</span>
-          <div style="flex: 1; height: 12px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; position: relative;">
-            <div style="height: 100%; background: linear-gradient(to right, #ef4444, #10b981);"></div>
-            <div style="position: absolute; top: 0; left: ${currentPosition}%; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 8px solid #1f2937; transform: translateX(-50%);"></div>
-          </div>
-          <span style="font-size: 0.875rem; font-weight: 600; color: #374151;">${formatPrice(maxPrice, tracker.currency)}</span>
-        </div>
+      <h3 style="color: #111827; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${tracker.productName}</h3>
+      <span style="background: #86efac; color: #14532d; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600; display: inline-block;">${formattedDate}</span>
+    </div>
+    
+    <!-- Price -->
+    <div style="text-align: center; min-width: 120px; flex-shrink: 0;">
+      <div style="font-size: 1.5rem; font-weight: 700; color: #dc2626; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)}</div>
+      <div style="font-size: 0.875rem; color: #6b7280;">${formatPrice(previousPrice.price, tracker.currency)}</div>
+    </div>
+    
+    <!-- Price Progress Bar -->
+    <div style="display: flex; align-items: center; gap: 0.5rem; min-width: 250px; flex-shrink: 0;">
+      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(minPrice, tracker.currency)}</span>
+      <div style="flex: 1; height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; position: relative;">
+        <div style="height: 100%; background: linear-gradient(to right, #ef4444, #22c55e);"></div>
+        <div style="position: absolute; top: -2px; left: ${currentPosition}%; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 8px solid #1f2937; transform: translateX(-50%);"></div>
       </div>
-      
-      <!-- Actions -->
-      <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
-        <button class="btn-history hover-gray-btn-light" data-id="${tracker.id}" style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; border-radius: 0.25rem;" title="Fiyat Geçmişi">
-          <span class="material-icons-outlined history-icon" style="font-size: 20px; color: #4b5563; transition: transform 0.3s;">expand_more</span>
-        </button>
-        <button class="btn-toggle hover-gray-btn-light" data-id="${tracker.id}" style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; border-radius: 0.25rem;" title="Takip Aç/Kapat">
-          <span class="material-icons-outlined" style="font-size: 20px; color: #4b5563;">${tracker.enabled === false ? 'check_box_outline_blank' : 'check_box'}</span>
-        </button>
-        <button class="btn-settings hover-gray-btn-light" data-id="${tracker.id}" style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; border-radius: 0.25rem;" title="Ayarlar">
-          <span class="material-icons-outlined" style="font-size: 20px; color: #4b5563;">settings</span>
-        </button>
-        <button class="btn-delete hover-gray-btn-light" data-id="${tracker.id}" style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; border-radius: 0.25rem;" title="Sil">
-          <span class="material-icons-outlined" style="font-size: 20px; color: #4b5563;">delete</span>
-        </button>
-      </div>
-      </div>
-      
-      <!-- Price History Dropdown (Kartın altında, full width) -->
-      <div class="price-history-container" id="history-${tracker.id}">
-        <div class="price-history-list">
-          ${generatePriceHistoryHTML(tracker)}
-        </div>
-      </div>
+      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(maxPrice, tracker.currency)}</span>
+    </div>
+    
+    <!-- Actions -->
+    <div style="display: flex; align-items: center; gap: 0.25rem; flex-shrink: 0;">
+      <button class="btn-toggle hover-gray-btn-light" data-id="${tracker.id}" style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; border-radius: 0.25rem; display: flex; align-items: center; justify-content: center;" title="Takip Aç/Kapat">
+        <span class="material-icons-outlined" style="font-size: 20px; color: #6b7280;">${tracker.enabled === false ? 'check_box_outline_blank' : 'check_box'}</span>
+      </button>
+      <button class="btn-settings hover-gray-btn-light" data-id="${tracker.id}" style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; border-radius: 0.25rem; display: flex; align-items: center; justify-content: center;" title="Ayarlar">
+        <span class="material-icons-outlined" style="font-size: 20px; color: #6b7280;">settings</span>
+      </button>
+      <button class="btn-delete hover-gray-btn-light" data-id="${tracker.id}" style="padding: 0.5rem; border: none; background: transparent; cursor: pointer; border-radius: 0.25rem; display: flex; align-items: center; justify-content: center;" title="Sil">
+        <span class="material-icons-outlined" style="font-size: 20px; color: #6b7280;">delete</span>
+      </button>
     </div>
   `;
   
   // Event listeners ekle
   setTimeout(() => {
-    const historyBtn = div.querySelector('.btn-history');
     const toggleBtn = div.querySelector('.btn-toggle');
     const settingsBtn = div.querySelector('.btn-settings');
     const deleteBtn = div.querySelector('.btn-delete');
-    
-    if (historyBtn) {
-      historyBtn.addEventListener('click', () => togglePriceHistory(tracker.id));
-    }
     
     if (toggleBtn) {
       toggleBtn.addEventListener('click', () => toggleTracker(tracker.id));
