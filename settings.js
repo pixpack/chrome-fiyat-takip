@@ -141,15 +141,6 @@ function loadSummaryStats(trackers) {
     return latest.price < previous.price;
   }).length;
   
-  const avgPrices = trackers.map(t => t.priceHistory[t.priceHistory.length - 1].price);
-  const avgPrice = avgPrices.length > 0 ? (avgPrices.reduce((a, b) => a + b, 0) / avgPrices.length) : 0;
-  
-  const activeTrackers = trackers.filter(t => {
-    const lastCheck = new Date(t.lastChecked || t.priceHistory[t.priceHistory.length - 1].date);
-    const hoursSinceCheck = (Date.now() - lastCheck.getTime()) / (1000 * 60 * 60);
-    return hoursSinceCheck < 24;
-  }).length;
-  
   summaryStats.innerHTML = `
     <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
       <div style="font-size: 1.875rem; font-weight: 700; color: #ff6b6b;">${totalProducts}</div>
@@ -158,14 +149,6 @@ function loadSummaryStats(trackers) {
     <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
       <div style="font-size: 1.875rem; font-weight: 700; color: #10b981;">${priceDrops}</div>
       <div style="font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">Fiyat Düşüşü</div>
-    </div>
-    <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
-      <div style="font-size: 1.875rem; font-weight: 700; color: #3b82f6;">${formatPrice(avgPrice, trackers[0]?.currency || 'TRY')}</div>
-      <div style="font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">Ort. Fiyat</div>
-    </div>
-    <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
-      <div style="font-size: 1.875rem; font-weight: 700; color: #f59e0b;">${activeTrackers}</div>
-      <div style="font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">Aktif Takip</div>
     </div>
   `;
 }
