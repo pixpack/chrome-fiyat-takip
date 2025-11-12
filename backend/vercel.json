@@ -1,19 +1,13 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "server-vercel.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "server-vercel.js"
+      "source": "/api/tracker/:path*",
+      "destination": "/api/tracker/:path*"
     },
     {
-      "src": "/webhook/(.*)",
-      "dest": "server-vercel.js"
+      "source": "/api/cron/:path*",
+      "destination": "/api/cron/:path*"
     }
   ],
   "crons": [

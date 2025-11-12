@@ -1,42 +1,50 @@
-// Vercel Serverless Function
-// Endpoint: /api/check-code?code=FC...
-// Extension tarafından çağrılır (polling)
+// GET /api/check-code?code=XXX
+// Kod kaydedilmiş mi kontrol et
 
-// NOT: Production için Vercel KV kullanın!
-// Şimdilik import ediyoruz ama Vercel'da paylaşımlı state yok
-// Bu yüzden aşağıda alternatif çözüm var
-import { registrations } from './register.js';
+const fetch = require('node-fetch');
 
-export default function handler(req, res) {
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+async function redisGet(key) {
+  const response = await fetch(`${REDIS_URL}/get/${key}`, {
+    headers: { 'Authorization': `Bearer ${REDIS_TOKEN}` }
+  });
+  const data = await response.json();
+  return data.result ? JSON.parse(data.result) : null;
+}
+
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
   
-  const { code } = req.query;
+  const code = req.query.code || new URL(req.url, `https://${req.headers.host}`).searchParams.get('code');
   
   if (!code) {
-    res.status(400).json({ success: false, error: 'Missing code' });
-    return;
+    return res.status(400).json({ success: false, error: 'Missing code' });
   }
   
-  const registration = registrations.get(code);
-  
-  if (registration) {
-    res.status(200).json({
-      success: true,
-      chatId: registration.chatId,
-      registered: true
-    });
-  } else {
-    res.status(200).json({
-      success: true,
-      registered: false,
-      message: 'Waiting for registration...'
-    });
+  try {
+    const registration = await redisGet(`reg:${code}`);
+    
+    if (registration) {
+      return res.status(200).json({
+        success: true,
+        registered: true,
+        chatId: registration.chatId
+      });
+    } else {
+      return res.status(200).json({
+        success: true,
+        registered: false,
+        message: 'Waiting for registration...'
+      });
+    }
+  } catch (error) {
+    console.error('❌ Check code error:', error);
+    return res.status(500).json({ success: false, error: error.message });
   }
-}
+};

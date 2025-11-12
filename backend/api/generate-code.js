@@ -1,23 +1,19 @@
-// Vercel Serverless Function
-// Endpoint: /api/generate-code
+// GET /api/generate-code
+// QR kod için benzersiz kod üret
 
-export default function handler(req, res) {
-  // Benzersiz kod üret (UUID benzeri)
-  const code = 'FC' + Date.now() + Math.random().toString(36).substring(2, 9).toUpperCase();
-  
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
   
-  res.status(200).json({
+  const code = 'FC' + Date.now() + Math.random().toString(36).substring(2, 9).toUpperCase();
+  
+  return res.status(200).json({
     success: true,
     code: code,
     qrUrl: `https://t.me/Fiyatci_bot?start=${code}`,
-    expiresIn: 300 // 5 dakika
+    expiresIn: 600 // 10 dakika
   });
-}
+};
