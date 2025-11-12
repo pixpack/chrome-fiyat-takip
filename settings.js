@@ -113,16 +113,16 @@ function loadTrackedProducts() {
     
     if (trackers.length === 0) {
       productsList.innerHTML = `
-        <div class="bg-white rounded-lg shadow-lg p-12 text-center">
-          <p class="text-gray-500 text-lg mb-4">Henüz takip edilen ürün yok</p>
-          <p class="text-gray-500 text-sm">Eklenti popup'ından ürün eklemeye başlayın</p>
+        <div style="background: white; border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 3rem; text-align: center;">
+          <p style="color: #6b7280; font-size: 1.125rem; margin-bottom: 1rem;">Henüz takip edilen ürün yok</p>
+          <p style="color: #6b7280; font-size: 0.875rem;">Eklenti popup'ından ürün eklemeye başlayın</p>
         </div>
       `;
       return;
     }
 
-    productsList.innerHTML = '<div class="space-y-4"></div>';
-    const container = productsList.querySelector('.space-y-4');
+    productsList.innerHTML = '<div style="display: flex; flex-direction: column; gap: 1rem;"></div>';
+    const container = productsList.querySelector('div');
     
     trackers.forEach((tracker, index) => {
       const card = createProductCard(tracker);
@@ -151,28 +151,28 @@ function loadSummaryStats(trackers) {
   }).length;
   
   summaryStats.innerHTML = `
-    <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-      <div class="text-3xl font-bold coral-accent">${totalProducts}</div>
-      <div class="text-sm text-gray-600 mt-1">Takip Edilen Ürün</div>
+    <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
+      <div style="font-size: 1.875rem; font-weight: 700; color: #ff6b6b;">${totalProducts}</div>
+      <div style="font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">Takip Edilen Ürün</div>
     </div>
-    <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-      <div class="text-3xl font-bold text-green-600">${priceDrops}</div>
-      <div class="text-sm text-gray-600 mt-1">Fiyat Düşüşü</div>
+    <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
+      <div style="font-size: 1.875rem; font-weight: 700; color: #10b981;">${priceDrops}</div>
+      <div style="font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">Fiyat Düşüşü</div>
     </div>
-    <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-      <div class="text-3xl font-bold text-blue-600">${formatPrice(avgPrice, trackers[0]?.currency || 'TRY')}</div>
-      <div class="text-sm text-gray-600 mt-1">Ort. Fiyat</div>
+    <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
+      <div style="font-size: 1.875rem; font-weight: 700; color: #3b82f6;">${formatPrice(avgPrice, trackers[0]?.currency || 'TRY')}</div>
+      <div style="font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">Ort. Fiyat</div>
     </div>
-    <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-      <div class="text-3xl font-bold text-yellow-600">${activeTrackers}</div>
-      <div class="text-sm text-gray-600 mt-1">Aktif Takip</div>
+    <div style="background: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem; text-align: center;">
+      <div style="font-size: 1.875rem; font-weight: 700; color: #f59e0b;">${activeTrackers}</div>
+      <div style="font-size: 0.875rem; color: #4b5563; margin-top: 0.25rem;">Aktif Takip</div>
     </div>
   `;
 }
 
 function createProductCard(tracker) {
   const div = document.createElement('div');
-  div.className = 'bg-white rounded-lg shadow-lg p-4';
+  div.style.cssText = 'background: white; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); padding: 1rem;';
   div.dataset.trackerId = tracker.id;
   
   const latestPrice = tracker.priceHistory[tracker.priceHistory.length - 1];
@@ -199,11 +199,11 @@ function createProductCard(tracker) {
   const currentPosition = priceRange > 0 ? ((latestPrice.price - minPrice) / priceRange) * 100 : 50;
 
   const imageHtml = tracker.productImage ? 
-    `<img alt="${tracker.productName}" class="w-20 h-20 object-cover rounded-md" src="${tracker.productImage}" onerror="this.outerHTML='<div class=\\'w-20 h-20 bg-gray-200 rounded-md flex items-center justify-center text-2xl\\'>📦</div>'">` : 
-    `<div class="w-20 h-20 bg-gray-200 rounded-md flex items-center justify-center text-2xl">📦</div>`;
+    `<img alt="${tracker.productName}" style="width: 5rem; height: 5rem; object-fit: cover; border-radius: 0.375rem;" src="${tracker.productImage}" onerror="this.outerHTML='<div style=\\'width: 5rem; height: 5rem; background: #e5e7eb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;\\'>📦</div>'">` : 
+    `<div style="width: 5rem; height: 5rem; background: #e5e7eb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">📦</div>`;
 
   const faviconHtml = tracker.favicon ? 
-    `<img alt="favicon" class="w-4 h-4 inline-block mr-1" src="${tracker.favicon}" onerror="this.style.display='none'">` : '';
+    `<img alt="favicon" style="width: 1rem; height: 1rem; display: inline-block; margin-right: 0.25rem;" src="${tracker.favicon}" onerror="this.style.display='none'">` : '';
 
   const formattedDate = new Date(latestPrice.date).toLocaleDateString('tr-TR', {
     day: '2-digit',
@@ -227,9 +227,9 @@ function createProductCard(tracker) {
       <div style="flex: 1; min-width: 200px; max-width: 300px;">
         <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
           ${faviconHtml}
-          <a class="text-sm font-semibold hover:underline" href="${tracker.url}" target="_blank" style="color: #4b5563;">${new URL(tracker.url).hostname}</a>
+          <a href="${tracker.url}" target="_blank" style="color: #4b5563; font-size: 0.875rem; font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${new URL(tracker.url).hostname}</a>
         </div>
-        <h3 class="text-base font-bold truncate" style="color: #111827; margin-bottom: 0.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${tracker.productName}</h3>
+        <h3 style="color: #111827; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${tracker.productName}</h3>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
           <span style="background: #d1fae5; color: #065f46; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-size: 0.75rem; font-weight: 600;">${formattedDate}</span>
         </div>
@@ -243,7 +243,7 @@ function createProductCard(tracker) {
             <span class="material-icons-outlined" style="font-size: 14px;">${tracker.url.includes('trendyol.com') ? 'local_offer' : tracker.url.includes('amazon.com.tr') ? 'inventory_2' : 'shopping_cart'}</span>
             ${formatPrice(latestPrice.basketPrice, tracker.currency)}
             <span style="color: #059669; font-size: 0.75rem;">-${((latestPrice.price - latestPrice.basketPrice) / latestPrice.price * 100).toFixed(0)}%</span>
-          </div>` : `<div class="line-through" style="font-size: 0.875rem; color: #6b7280;">${formatPrice(previousPrice.price, tracker.currency)}</div>`}
+          </div>` : `<div style="font-size: 0.875rem; color: #6b7280; text-decoration: line-through;">${formatPrice(previousPrice.price, tracker.currency)}</div>`}
         </div>
         
         <!-- Price Progress -->
