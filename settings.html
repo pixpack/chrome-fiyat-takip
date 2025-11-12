@@ -224,10 +224,16 @@
         
         /* Tracking Modes */
         .tracking-modes {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
             margin-bottom: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .tracking-modes {
+                grid-template-columns: 1fr;
+            }
         }
         
         .mode-option {
@@ -237,6 +243,9 @@
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 200px;
         }
         
         .mode-option:hover {
@@ -250,23 +259,26 @@
         
         .mode-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         
         .mode-title {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
+            text-align: center;
+            flex: 1;
         }
         
         .mode-icon {
-            font-size: 24px;
+            font-size: 32px;
         }
         
         .mode-name {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             color: #1a202c;
         }
@@ -288,7 +300,9 @@
             height: 24px;
             border: 2px solid #cbd5e0;
             border-radius: 50%;
-            position: relative;
+            position: absolute;
+            top: 16px;
+            right: 16px;
             transition: all 0.2s;
             flex-shrink: 0;
         }
@@ -311,22 +325,26 @@
         
         .mode-features {
             list-style: none;
-            margin-left: 36px;
+            margin-left: 0;
+            margin-top: auto;
+            padding-top: 12px;
         }
         
         .mode-features li {
-            font-size: 14px;
+            font-size: 13px;
             color: #4a5568;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             padding-left: 20px;
             position: relative;
+            line-height: 1.5;
         }
         
         .mode-features li::before {
             content: '•';
             position: absolute;
             left: 0;
-            color: #718096;
+            color: #3182ce;
+            font-weight: bold;
         }
         
         /* Info Box */
@@ -503,12 +521,12 @@
             <div class="tracking-modes">
                 <!-- Chrome Only -->
                 <div class="mode-option" data-mode="extension-only">
+                    <div class="radio-button"></div>
                     <div class="mode-header">
                         <div class="mode-title">
                             <span class="mode-icon">💻</span>
                             <span class="mode-name">Chrome Only</span>
                         </div>
-                        <div class="radio-button"></div>
                     </div>
                     <ul class="mode-features">
                         <li>1-minute checks.</li>
@@ -519,12 +537,12 @@
                 <!-- Hybrid Mode -->
                 <div class="mode-option selected" data-mode="hybrid">
                     <span class="recommended-badge">Recommended</span>
+                    <div class="radio-button"></div>
                     <div class="mode-header">
                         <div class="mode-title">
                             <span class="mode-icon">🚀</span>
                             <span class="mode-name">Hybrid Mode</span>
                         </div>
-                        <div class="radio-button"></div>
                     </div>
                     <ul class="mode-features">
                         <li>1-minute checks when Chrome is open.</li>
@@ -535,12 +553,12 @@
                 
                 <!-- Backend Only -->
                 <div class="mode-option" data-mode="backend-only">
+                    <div class="radio-button"></div>
                     <div class="mode-header">
                         <div class="mode-title">
                             <span class="mode-icon">☁️</span>
                             <span class="mode-name">Backend Only</span>
                         </div>
-                        <div class="radio-button"></div>
                     </div>
                     <ul class="mode-features">
                         <li>Günde 1 kere otomatik kontrol (12:00).</li>
