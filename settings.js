@@ -930,6 +930,38 @@ async function loadTrackingMode() {
   });
 }
 
+// ==========================================
+// TAB SİSTEMİ
+// ==========================================
+
+// Tab switching
+document.addEventListener('DOMContentLoaded', () => {
+  // Tab butonlarına click event ekle
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+  
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetTab = button.getAttribute('data-tab');
+      
+      // Tüm tab'ları ve butonları deaktif et
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      // Seçili tab'ı aktif et
+      button.classList.add('active');
+      const targetContent = document.getElementById(`tab-${targetTab}`);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+});
+
+// ==========================================
+// TRACKING MODE & SETTINGS
+// ==========================================
+
 // Tracking mode değişikliğini dinle
 document.addEventListener('DOMContentLoaded', () => {
   // Eski radio button sistemi
