@@ -449,13 +449,33 @@
         
         <!-- Telegram Not Connected -->
         <div class="card" id="telegram-not-connected" style="display: none;">
-            <div class="qr-section">
-                <button class="qr-button" id="telegram-connect-btn">
-                    <span style="font-size: 24px;">📱</span>
-                    <span>QR Kod Göster</span>
-                    <span class="material-icons-outlined">qr_code_2</span>
+            <div style="text-align: center; padding: 20px;">
+                <h2 style="font-size: 24px; font-weight: 600; color: #1a202c; margin-bottom: 16px;">📱 Telegram'ı Bağla</h2>
+                <p style="font-size: 14px; color: #718096; margin-bottom: 24px;">Fiyat değişikliklerini Telegram'dan almak için botla bağlantı kur.</p>
+                
+                <button class="qr-button" id="telegram-connect-btn" style="margin-bottom: 20px;">
+                    <span style="font-size: 24px;">🤖</span>
+                    <span>Telegram Botunu Aç</span>
+                    <span>→</span>
                 </button>
-                <div id="qr-display"></div>
+                
+                <div id="telegram-instructions" style="display: none; background: #f7fafc; border-radius: 8px; padding: 20px; text-align: left; margin-top: 20px;">
+                    <h3 style="font-size: 16px; font-weight: 600; color: #2d3748; margin-bottom: 12px;">📋 Talimatlar:</h3>
+                    <ol style="font-size: 14px; color: #4a5568; line-height: 1.8; margin-left: 20px;">
+                        <li>Telegram'da botu açın</li>
+                        <li><strong>/start</strong> yazın</li>
+                        <li>Bot size bir kod gönderecek</li>
+                        <li>O kodu aşağıya yapıştırın</li>
+                    </ol>
+                    
+                    <div style="margin-top: 16px;">
+                        <input type="text" id="chat-id-input" placeholder="Chat ID'nizi girin (örn: 7274355748)" 
+                               style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; margin-bottom: 12px;">
+                        <button id="manual-connect-btn" style="width: 100%; background: #48bb78; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                            ✅ Bağlan
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         

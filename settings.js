@@ -736,46 +736,48 @@ async function loadTelegramStatus() {
   }
 }
 
-// QR Kod göster ve bağlantı başlat
+// Telegram Bot'u aç
 const telegramConnectBtn = document.getElementById('telegram-connect-btn');
 if (telegramConnectBtn) {
-  telegramConnectBtn.addEventListener('click', async () => {
-  try {
-    // Backend'den kod al
-    const response = await fetch(`${BACKEND_URL}/api/generate-code`);
-    const data = await response.json();
+  telegramConnectBtn.addEventListener('click', () => {
+    // Telegram botunu yeni sekmede aç
+    window.open('https://t.me/Fiyatci_bot', '_blank');
     
-    if (!data.success) {
-      await showAlert('Kod oluşturulamadı. Backend çalışıyor mu?', 'Hata', 'error');
+    // Talimatları göster
+    const instructions = document.getElementById('telegram-instructions');
+    if (instructions) {
+      instructions.style.display = 'block';
+    }
+  });
+}
+
+// Manuel Chat ID bağlantısı
+const manualConnectBtn = document.getElementById('manual-connect-btn');
+if (manualConnectBtn) {
+  manualConnectBtn.addEventListener('click', async () => {
+    const chatIdInput = document.getElementById('chat-id-input');
+    const chatId = chatIdInput.value.trim();
+    
+    if (!chatId) {
+      await showAlert('Lütfen Chat ID\'nizi girin!', 'Uyarı', 'warning');
       return;
     }
     
-    const { code, qrUrl } = data;
-    
-    // QR kodu göster (eski HTML için)
-    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrUrl)}`;
-    const qrImage = document.getElementById('qr-code-image');
-    const botLink = document.getElementById('bot-link');
-    const qrContainer = document.getElementById('qr-container');
-    const qrWaiting = document.getElementById('qr-waiting');
-    
-    if (qrImage) qrImage.src = qrCodeUrl;
-    if (botLink) botLink.href = qrUrl;
-    if (qrContainer) qrContainer.style.display = 'none';
-    if (qrWaiting) qrWaiting.style.display = 'block';
-    
-    // Yeni HTML için QR display
-    const qrDisplay = document.getElementById('qr-display');
-    if (qrDisplay) {
-      qrDisplay.innerHTML = `<img src="${qrCodeUrl}" alt="QR Code" style="display: block; margin: 20px auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">`;
+    if (!/^\d+$/.test(chatId)) {
+      await showAlert('Chat ID sadece sayılardan oluşmalıdır!', 'Hata', 'error');
+      return;
     }
     
-    // Polling başlat
-    startPolling(code);
+    // Storage'a kaydet
+    await chrome.storage.local.set({
+      telegramChatId: chatId,
+      telegramBotToken: BOT_TOKEN
+    });
     
-  } catch (error) {
-    await showAlert(`Backend'e bağlanılamadı: ${error.message}\n\nBackend çalıştığından emin olun!`, 'Hata', 'error');
-  }
+    await showAlert('🎉 Telegram başarıyla bağlandı!\n\nBildirimler artık Telegram\'dan gelecek.', 'Başarılı', 'success');
+    
+    // UI'ı güncelle
+    loadTelegramStatus();
   });
 }
 

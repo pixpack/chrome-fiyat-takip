@@ -71,8 +71,15 @@ module.exports = async (req, res) => {
         const parts = text.split(' ');
         
         if (parts.length === 1) {
-          // Sadece /start
-          await sendTelegramMessage(chatId, '👋 Merhaba! Fiyat takip botuna hoş geldiniz!\n\n✅ Kayıt olmak için Chrome eklentisinden QR kodu okutun.');
+          // Sadece /start - Chat ID'yi gönder
+          await sendTelegramMessage(
+            chatId, 
+            `🎉 <b>Hoş Geldiniz!</b>\n\n` +
+            `✅ Fiyat takip botuna başarıyla bağlandınız!\n\n` +
+            `📱 <b>Chat ID'niz:</b>\n<code>${chatId}</code>\n\n` +
+            `👉 Bu kodu kopyalayıp Chrome eklentisine yapıştırın.\n\n` +
+            `💡 Kodu kopyalamak için üzerine tıklayın.`
+          );
         } else {
           // /start CODE
           const code = parts[1];
