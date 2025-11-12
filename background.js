@@ -26,23 +26,35 @@ async function syncTrackerToBackend(tracker) {
       return;
     }
     
-    // Backend'e gönder
+    // Backend'e gönder (XMLHttpRequest ile)
     const url = `${BACKEND_URL}/api/tracker/add`;
     console.log('🌐 Backend URL:', url);
-    console.log('🔍 URL typeof:', typeof url, 'Length:', url.length);
     console.log('📦 Gönderilen data:', { chatId, tracker: tracker.productName });
     
-    // Stringify body önce
     const body = JSON.stringify({ chatId, tracker });
     console.log('📤 Body length:', body.length);
     
-    const response = await globalThis.fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: body
+    // XMLHttpRequest kullan (Service Worker'da fetch sorunlu olabilir)
+    const data = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            resolve(JSON.parse(xhr.responseText));
+          } catch (e) {
+            reject(new Error('JSON parse hatası'));
+          }
+        } else {
+          reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+        }
+      };
+      
+      xhr.onerror = () => reject(new Error('Network hatası'));
+      xhr.send(body);
     });
-    
-    const data = await response.json();
     
     if (data.success) {
       console.log('✅ Tracker backend\'e kaydedildi:', tracker.productName);
@@ -51,6 +63,12 @@ async function syncTrackerToBackend(tracker) {
     }
   } catch (error) {
     console.error('❌ Backend sync hatası:', error);
+    console.error('❌ Hata detayları:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    console.error('❌ Tracker objesi:', tracker);
   }
 }
 
@@ -74,17 +92,30 @@ async function removeTrackerFromBackend(trackerId) {
       return;
     }
     
-    // Backend'den sil
+    // Backend'den sil (XMLHttpRequest ile)
     const url = `${BACKEND_URL}/api/tracker/remove`;
     const body = JSON.stringify({ chatId, trackerId });
     
-    const response = await globalThis.fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: body
+    const data = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            resolve(JSON.parse(xhr.responseText));
+          } catch (e) {
+            reject(new Error('JSON parse hatası'));
+          }
+        } else {
+          reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+        }
+      };
+      
+      xhr.onerror = () => reject(new Error('Network hatası'));
+      xhr.send(body);
     });
-    
-    const data = await response.json();
     
     if (data.success) {
       console.log('✅ Tracker backend\'den silindi:', trackerId);
