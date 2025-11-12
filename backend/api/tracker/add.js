@@ -43,6 +43,21 @@ module.exports = async (req, res) => {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
   
+  // Debug: Environment variables
+  console.log('🔍 REDIS_URL:', REDIS_URL ? 'SET' : 'UNDEFINED');
+  console.log('🔍 REDIS_TOKEN:', REDIS_TOKEN ? 'SET' : 'UNDEFINED');
+  
+  if (!REDIS_URL || !REDIS_TOKEN) {
+    return res.status(500).json({ 
+      success: false, 
+      error: 'Redis credentials not configured',
+      debug: {
+        hasUrl: !!REDIS_URL,
+        hasToken: !!REDIS_TOKEN
+      }
+    });
+  }
+  
   try {
     const body = await readBody(req);
     const { chatId, tracker } = body;

@@ -41,6 +41,14 @@ module.exports = async (req, res) => {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
   
+  // Debug: Environment variables
+  if (!REDIS_URL || !REDIS_TOKEN) {
+    return res.status(500).json({ 
+      success: false, 
+      error: 'Redis credentials not configured' 
+    });
+  }
+  
   try {
     const body = await readBody(req);
     const { chatId, trackerId } = body;
