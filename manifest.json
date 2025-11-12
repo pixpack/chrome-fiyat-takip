@@ -29,7 +29,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js", "notification-overlay.js"]
+      "js": ["content.js"]
     }
   ],
   "icons": {
@@ -39,7 +39,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["icon16.png", "icon48.png", "icon128.png", "notification-overlay.css"],
+      "resources": ["icon16.png", "icon48.png", "icon128.png"],
       "matches": ["<all_urls>"]
     }
   ],
