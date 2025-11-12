@@ -851,5 +851,52 @@ document.getElementById('telegram-test-connected-btn').addEventListener('click',
   }
 });
 
+// ==========================================
+// TRACKING MODE YÖNETİMİ
+// ==========================================
+
+// Tracking mode'u yükle
+async function loadTrackingMode() {
+  const data = await chrome.storage.local.get(['trackingMode']);
+  const mode = data.trackingMode || 'hybrid'; // Varsayılan: hybrid
+  
+  // Radio button'ı seç
+  const radio = document.querySelector(`input[name="trackingMode"][value="${mode}"]`);
+  if (radio) {
+    radio.checked = true;
+  }
+}
+
+// Tracking mode değişikliğini dinle
+document.addEventListener('DOMContentLoaded', () => {
+  const radios = document.querySelectorAll('input[name="trackingMode"]');
+  
+  radios.forEach(radio => {
+    radio.addEventListener('change', async (e) => {
+      const mode = e.target.value;
+      
+      // Kaydet
+      await chrome.storage.local.set({ trackingMode: mode });
+      
+      console.log(`✅ Tracking mode değiştirildi: ${mode}`);
+      
+      // Bilgilendirme
+      let message = '';
+      if (mode === 'extension-only') {
+        message = '🖥️ Sadece Chrome açıkken fiyatlar kontrol edilecek.';
+      } else if (mode === 'hybrid') {
+        message = '🚀 Chrome açıkken 1 dakikada bir, kapalıyken günde 1 kere kontrol edilecek.';
+      } else if (mode === 'backend-only') {
+        message = '☁️ Sadece backend (günde 1 kere) kontrol edecek. Chrome gerektirmez.';
+      }
+      
+      await showAlert(message, 'Ayar Kaydedildi', 'success');
+    });
+  });
+  
+  // Tracking mode'u yükle
+  loadTrackingMode();
+});
+
 // Sayfa yüklendiğinde Telegram durumunu yükle
 loadTelegramStatus();
