@@ -1,3 +1,6 @@
+// Settings.js v1.1 - Updated Price Display
+console.log('🎨 Settings.js v1.1 loaded - Price comparison with first price!');
+
 // Custom Alert & Confirm
 function showAlert(message, title = 'Bildirim', icon = 'info') {
   return new Promise((resolve) => {
