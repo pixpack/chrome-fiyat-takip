@@ -1,5 +1,5 @@
-// Settings.js v1.1 - Updated Price Display
-console.log('🎨 Settings.js v1.1 loaded - Price comparison with first price!');
+// Settings.js v1.2 - Fixed Price Display Order
+console.log('🎨 Settings.js v1.2 loaded - First price (big) → Latest price (small)!');
 
 // Custom Alert & Confirm
 function showAlert(message, title = 'Bildirim', icon = 'info') {
@@ -215,13 +215,13 @@ function createProductCard(tracker) {
     
     <!-- Price -->
     <div style="text-align: center; min-width: 120px; flex-shrink: 0;">
+      <div style="font-size: 1.5rem; font-weight: 700; color: #6b7280; line-height: 1.2;">${formatPrice(firstPrice.price, tracker.currency)}</div>
       ${latestPrice.price < firstPrice.price ? 
-        `<div style="font-size: 1.5rem; font-weight: 700; color: #10b981; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)} ↓</div>` :
+        `<div style="font-size: 0.875rem; color: #10b981; font-weight: 600;">Yeni: ${formatPrice(latestPrice.price, tracker.currency)} ↓</div>` :
         latestPrice.price > firstPrice.price ?
-        `<div style="font-size: 1.5rem; font-weight: 700; color: #dc2626; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)} ↑</div>` :
-        `<div style="font-size: 1.5rem; font-weight: 700; color: #6b7280; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)}</div>`
+        `<div style="font-size: 0.875rem; color: #dc2626; font-weight: 600;">Yeni: ${formatPrice(latestPrice.price, tracker.currency)} ↑</div>` :
+        `<div style="font-size: 0.875rem; color: #6b7280;">Değişmedi</div>`
       }
-      <div style="font-size: 0.875rem; color: #6b7280;">İlk: ${formatPrice(firstPrice.price, tracker.currency)}</div>
     </div>
     
     <!-- Price Progress Bar -->
