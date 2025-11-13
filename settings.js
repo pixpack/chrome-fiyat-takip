@@ -221,12 +221,17 @@ function createProductCard(tracker) {
         `<div style="font-size: 1.5rem; font-weight: 700; color: #dc2626; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)} ↑</div>` :
         `<div style="font-size: 1.5rem; font-weight: 700; color: #6b7280; line-height: 1.2;">${formatPrice(latestPrice.price, tracker.currency)}</div>`
       }
-      <div style="font-size: 0.875rem; color: #6b7280;">${formatPrice(firstPrice.price, tracker.currency)}</div>
+      <div style="font-size: 0.875rem; color: #6b7280;">İlk: ${formatPrice(firstPrice.price, tracker.currency)}</div>
     </div>
     
     <!-- Price Progress Bar -->
     <div style="display: flex; align-items: center; gap: 0.5rem; min-width: 250px; flex-shrink: 0;">
-      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(firstPrice.price, tracker.currency)}</span>
+      ${latestPrice.price < firstPrice.price ? 
+        `<span style="font-size: 0.75rem; font-weight: 600; color: #10b981;">↓ ${Math.abs(priceChangePercent).toFixed(1)}%</span>` :
+        latestPrice.price > firstPrice.price ?
+        `<span style="font-size: 0.75rem; font-weight: 600; color: #dc2626;">↑ ${Math.abs(priceChangePercent).toFixed(1)}%</span>` :
+        `<span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">0%</span>`
+      }
       <div style="flex: 1; height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; position: relative;">
         ${latestPrice.price < firstPrice.price ? 
           `<div style="height: 100%; background: #10b981; width: ${100 - progressPosition}%; margin-left: ${progressPosition}%;"></div>` :
@@ -236,7 +241,12 @@ function createProductCard(tracker) {
         }
         <div style="position: absolute; top: -2px; left: ${progressPosition}%; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 8px solid #1f2937; transform: translateX(-50%);"></div>
       </div>
-      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(latestPrice.price, tracker.currency)}</span>
+      ${latestPrice.price < firstPrice.price ? 
+        `<span style="font-size: 0.75rem; font-weight: 600; color: #10b981;">↓ ${Math.abs(priceChangePercent).toFixed(1)}%</span>` :
+        latestPrice.price > firstPrice.price ?
+        `<span style="font-size: 0.75rem; font-weight: 600; color: #dc2626;">↑ ${Math.abs(priceChangePercent).toFixed(1)}%</span>` :
+        `<span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">0%</span>`
+      }
     </div>
     
     <!-- Actions -->
