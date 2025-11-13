@@ -163,11 +163,20 @@ function createProductCard(tracker) {
   const previousPrice = tracker.priceHistory.length > 1 ? 
     tracker.priceHistory[tracker.priceHistory.length - 2] : latestPrice;
   
-  // Calculate price range and position
-  const minPrice = Math.min(...tracker.priceHistory.map(p => p.price));
-  const maxPrice = Math.max(...tracker.priceHistory.map(p => p.price));
-  const priceRange = maxPrice - minPrice;
-  const currentPosition = priceRange > 0 ? ((latestPrice.price - minPrice) / priceRange) * 100 : 50;
+  // Calculate price change percentage from first price
+  const priceChange = latestPrice.price - firstPrice.price;
+  const priceChangePercent = firstPrice.price > 0 ? (priceChange / firstPrice.price * 100) : 0;
+  
+  // Progress bar: show range between first and current price
+  const progressMin = Math.min(firstPrice.price, latestPrice.price);
+  const progressMax = Math.max(firstPrice.price, latestPrice.price);
+  const progressRange = progressMax - progressMin;
+  
+  // Calculate position for current price indicator
+  let progressPosition = 50; // Default middle
+  if (progressRange > 0) {
+    progressPosition = ((latestPrice.price - progressMin) / progressRange) * 100;
+  }
 
   const imageHtml = tracker.productImage ? 
     `<img alt="${tracker.productName}" style="width: 64px; height: 64px; object-fit: cover; border-radius: 0.375rem;" src="${tracker.productImage}" onerror="this.outerHTML='<div style=\\'width: 64px; height: 64px; background: #e5e7eb; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;\\'>📦</div>'">` : 
@@ -214,12 +223,17 @@ function createProductCard(tracker) {
     
     <!-- Price Progress Bar -->
     <div style="display: flex; align-items: center; gap: 0.5rem; min-width: 250px; flex-shrink: 0;">
-      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(minPrice, tracker.currency)}</span>
+      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(firstPrice.price, tracker.currency)}</span>
       <div style="flex: 1; height: 8px; background: #e5e7eb; border-radius: 9999px; overflow: hidden; position: relative;">
-        <div style="height: 100%; background: linear-gradient(to right, #ef4444, #22c55e);"></div>
-        <div style="position: absolute; top: -2px; left: ${currentPosition}%; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 8px solid #1f2937; transform: translateX(-50%);"></div>
+        ${latestPrice.price < firstPrice.price ? 
+          `<div style="height: 100%; background: #10b981; width: ${100 - progressPosition}%; margin-left: ${progressPosition}%;"></div>` :
+          latestPrice.price > firstPrice.price ?
+          `<div style="height: 100%; background: #dc2626; width: ${progressPosition}%;"></div>` :
+          `<div style="height: 100%; background: #6b7280; width: 0%;"></div>`
+        }
+        <div style="position: absolute; top: -2px; left: ${progressPosition}%; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 8px solid #1f2937; transform: translateX(-50%);"></div>
       </div>
-      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(maxPrice, tracker.currency)}</span>
+      <span style="font-size: 0.75rem; font-weight: 600; color: #6b7280;">${formatPrice(latestPrice.price, tracker.currency)}</span>
     </div>
     
     <!-- Actions -->
